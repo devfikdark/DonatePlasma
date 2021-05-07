@@ -15,7 +15,7 @@ import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
+    height: "93vh",
   },
   image: {
     backgroundImage: "url(https://images.unsplash.com/photo-1596978759889-91e1a654faca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)",
@@ -100,7 +100,7 @@ export default function Login() {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -125,6 +125,7 @@ export default function Login() {
           </form>
         </div>
       </Grid>
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
     </Grid>
   );
 }

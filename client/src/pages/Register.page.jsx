@@ -146,7 +146,7 @@ export default function RegisterPage() {
               </RadioGroup>
             </Grid>
             <Grid item xs={12}>
-              <TextField required variant="outlined" name="userName" value={userName} fullWidth label="Username" onChange={handleChange} autofocus />
+              <TextField required variant="outlined" name="userName" value={userName} fullWidth label="Username" onChange={handleChange} autoFocus />
             </Grid>
             {registrationType === "individual" && (
               <Grid item xs={12}>
