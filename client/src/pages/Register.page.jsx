@@ -3,6 +3,7 @@ import { Avatar, Grid, Typography, Container, CssBaseline, TextField, Button, Ci
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { indigo } from "@material-ui/core/colors";
 import { Link, useHistory } from "react-router-dom";
+import AttachmentIcon from "@material-ui/icons/Attachment";
 import { makeStyles } from "@material-ui/core/styles";
 import Notification from "../components/Notification.component";
 import axios from "axios";
@@ -13,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  fileButton: {
+    marginRight: "1em",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -52,13 +56,15 @@ export default function RegisterPage() {
   const [signUpForm, setSignUpForm] = useState({
     registrationType: "individual",
     name: "",
+    useName: "",
     hospitalName: "",
     phoneNumber: "",
     password: "",
     confirmPassword: "",
   });
-  const { name, hospitalName, registrationType, phoneNumber, password, confirmPassword } = signUpForm;
-
+  const { name, hospitalName, registrationType, userName, phoneNumber, password, confirmPassword } = signUpForm;
+  const [file, setFile] = useState({ filePath: "", fileName: "" });
+  const { filePath, fileName } = file;
   // METHODS
   const handleValidation = () => {
     if (name === "" || password === "" || confirmPassword === "") {
@@ -71,6 +77,11 @@ export default function RegisterPage() {
   };
   const handleChange = (e) => {
     setSignUpForm({ ...signUpForm, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile({ filePath: selectedFile, fileName: selectedFile.name });
   };
 
   const handleSubmit = (e) => {
@@ -120,19 +131,31 @@ export default function RegisterPage() {
                 <FormControlLabel value="hospital" control={<Radio />} label="Hospital" />
               </RadioGroup>
             </Grid>
+            <Grid item xs={12}>
+              <TextField required variant="outlined" name="userName" value={userName} fullWidth label="Username" onChange={handleChange} autofocus />
+            </Grid>
             {registrationType === "individual" && (
               <Grid item xs={12}>
-                <TextField autoFocus name="name" value={name} onChange={handleChange} variant="outlined" required fullWidth label="First Name*" />
+                <TextField name="name" value={name} onChange={handleChange} variant="outlined" required fullWidth label="First Name" />
               </Grid>
             )}
             {registrationType === "hospital" && (
               <Grid item xs={12}>
-                <TextField autoFocus name="name" value={hospitalName} onChange={handleChange} variant="outlined" required fullWidth label="Hospital Name*" />
+                <TextField name="name" value={hospitalName} onChange={handleChange} variant="outlined" required fullWidth label="Hospital Name" />
               </Grid>
             )}
             <Grid item xs={12}>
-              <TextField variant="outlined" required fullWidth label="Phone Number*" name="phoneNumber" value={phoneNumber} type="number" onChange={handleChange} />
+              <TextField variant="outlined" required fullWidth label="Phone Number" name="phoneNumber" value={phoneNumber} type="number" onChange={handleChange} />
             </Grid>
+            {registrationType === "hospital" && (
+              <Grid item xs={12}>
+                <Button variant="contained" component="label" startIcon={<AttachmentIcon />} className={classes.fileButton}>
+                  File Input
+                  <input type="file" hidden name="encryptFile" onChange={handleFileChange} />
+                </Button>
+                {fileName}
+              </Grid>
+            )}
             <Grid item xs={12}>
               <TextField variant="outlined" required fullWidth name="password" value={password} onChange={handleChange} label="Password" type="password" />
             </Grid>
