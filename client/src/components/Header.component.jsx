@@ -41,6 +41,11 @@ export default function Header() {
               Hospital
             </Button>
           </Link>
+          <Link to="/donor-profile">
+            <Button color="inherit" className={classes.buttonStyle}>
+              Profile
+            </Button>
+          </Link>
           <Link to="/login">
             <Button color="inherit" className={classes.buttonStyle}>
               Login
