@@ -30,7 +30,7 @@ const PendingHospitalList = () => {
             <Card className={classes.borderRadius}>
               <CardContent>
                 <Grid container spacing={2}>
-                  <Grid items xs={12} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <Box p={2}>
                       <Typography variant="h6">Hospital Name</Typography>
                       <Typography variant="subtitle1">Pen Pecific Hospital</Typography>
@@ -47,10 +47,10 @@ const PendingHospitalList = () => {
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid items xs={12} sm={6}>
+                  <Grid item xs={12} sm={6}>
                     <img
                       src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80"
-                      alt="hospital-image"
+                      alt="hospital"
                       height="100%"
                       width="100%"
                     />
