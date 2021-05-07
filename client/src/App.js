@@ -1,6 +1,10 @@
-import { Button, Typography } from "@material-ui/core";
+import { Switch, Route } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { NotificationContainer } from "react-notifications";
 import "./App.css";
+import Header from "./components/Header.component";
+import RegisterPage from "./pages/Register.page";
+import LoginPage from "./pages/Login.page";
 
 const theme = createMuiTheme({
   typography: {
@@ -12,9 +16,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <Typography variant="h3">Hello there</Typography>
-        <Button>hello</Button>
+        <Header />
+        <Switch>
+          <Route exact path="/register" component={RegisterPage} />
+          <Route exact path="/login" component={LoginPage} />
+        </Switch>
       </div>
+      <NotificationContainer />
     </ThemeProvider>
   );
 }
