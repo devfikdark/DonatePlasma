@@ -12,40 +12,31 @@ import sendMessage from "../utils/responses/sendMessage";
 export const signUpUser = catchAsync(async (req, res, next) => {
   res.setHeader("Content-type", "application/json");
 
-  const { userName, name, password, address, phone, role, age, bloodGroup, dispatchDate, status } = req.body;
-  if (!userName) return next(new AppError("Provide your userName.", 400));
-  if (!name) return next(new AppError("Provide your name.", 400));
-  if (!password) return next(new AppError("Provide your password.", 400));
-  if (!address) return next(new AppError("Provide your address.", 400));
-  if (!phone) return next(new AppError("Provide your phone.", 400));
-  if (!role) return next(new AppError("Provide your role.", 400));
-  if (!age) return next(new AppError("Provide your age.", 400));
-  if (!bloodGroup) return next(new AppError("Provide your bloodGroup.", 400));
+  const { user, doner } = req.body;
+
+  if (!user.userName) return next(new AppError("Provide your userName.", 400));
+  if (!user.name) return next(new AppError("Provide your name.", 400));
+  if (!user.password) return next(new AppError("Provide your password.", 400));
+  if (!user.phone) return next(new AppError("Provide your phone.", 400));
+  if (!user.role) return next(new AppError("Provide your role.", 400));
 
   let userInfo = await User.findOne({
-    userName,
+    userName: user.userName,
   });
   if (userInfo) return next(new AppError("Already use this userName.", 400));
 
   userInfo = await User.create({
-    userName,
-    name, 
-    address, 
-    phone, 
-    role,
+    ...user,
     createAt: Date.now(),
   });
   if (!userInfo) return next(new AppError("Somthing went wrong to create user."));
-  userInfo.password = await userInfo.hashPassword(password);
+  userInfo.password = await userInfo.hashPassword(user.password);
   await userInfo.save();
 
   // create doner
   const donerInfo = await Doner.create({
-    age,
+    ...doner,
     user: userInfo._id,
-    dispatchDate,
-    bloodGroup,
-    status,
     createAt: Date.now(),
   })
   if (!donerInfo) return next(new AppError("Somthing went wrong to create doner."));
@@ -56,14 +47,12 @@ export const signUpUser = catchAsync(async (req, res, next) => {
 export const signUpHospital = catchAsync(async (req, res, next) => {
   res.setHeader("Content-type", "application/json");
 
-  const { userName, name, password, address, phone, role, website, documents } = req.body;
+  const { userName, name, password, phone, role, documents } = req.body;
   if (!userName) return next(new AppError("Provide hospital userName.", 400));
   if (!name) return next(new AppError("Provide hospital name.", 400));
   if (!password) return next(new AppError("Provide hospital password.", 400));
-  if (!address) return next(new AppError("Provide hospital address.", 400));
   if (!phone) return next(new AppError("Provide hospital phone.", 400));
   if (!role) return next(new AppError("Provide your role.", 400));
-  if (!website) return next(new AppError("Provide hospital website.", 400));
   if (!documents) return next(new AppError("Provide hospital documents.", 400));
 
   let userInfo = await User.findOne({
@@ -74,7 +63,6 @@ export const signUpHospital = catchAsync(async (req, res, next) => {
   userInfo = await User.create({
     userName,
     name, 
-    address, 
     phone, 
     role,
     createAt: Date.now(),
@@ -85,7 +73,6 @@ export const signUpHospital = catchAsync(async (req, res, next) => {
 
   // create hospital
   const hospitalInfo = await Hospital.create({
-    website,
     user: userInfo._id,
     documents,
     createAt: Date.now(),
