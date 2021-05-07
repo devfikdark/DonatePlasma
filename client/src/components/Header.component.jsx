@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  buttonStyle: {
+    textTransform: "capitalize",
+  },
 }));
 
 export default function Header() {
@@ -29,13 +32,24 @@ export default function Header() {
             Donate Plasma
           </Typography>
           <Link to="/">
-            <Button color="inherit">Donor List</Button>
+            <Button color="inherit" className={classes.buttonStyle}>
+              Donor List
+            </Button>
+          </Link>
+          <Link to="/pending-hospitals">
+            <Button color="inherit" className={classes.buttonStyle}>
+              Hospital
+            </Button>
           </Link>
           <Link to="/login">
-            <Button color="inherit">Login</Button>
+            <Button color="inherit" className={classes.buttonStyle}>
+              Login
+            </Button>
           </Link>
           <Link to="/register">
-            <Button color="inherit">Register</Button>
+            <Button color="inherit" className={classes.buttonStyle}>
+              Register
+            </Button>
           </Link>
         </Toolbar>
       </AppBar>
