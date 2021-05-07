@@ -56,7 +56,7 @@ export default function RegisterPage() {
   const [signUpForm, setSignUpForm] = useState({
     registrationType: "individual",
     name: "",
-    useName: "",
+    userName: "",
     hospitalName: "",
     phoneNumber: "",
     password: "",
@@ -67,12 +67,26 @@ export default function RegisterPage() {
   const { filePath, fileName } = file;
   // METHODS
   const handleValidation = () => {
-    if (name === "" || password === "" || confirmPassword === "") {
-      return Notification("Warning", "All fields are required", "warning");
-    } else if (password !== confirmPassword) {
-      return Notification("Warning", "Password didn't match!", "warning");
+    const validateNumber = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/.test(phoneNumber);
+    if (registrationType === "individual") {
+      if (userName === "" || name === "" || phoneNumber === "" || password === "" || confirmPassword === "") return Notification("Warning", "All fields are required", "warning");
+      if (password !== confirmPassword) {
+        return Notification("Warning", "Password didn't match!", "warning");
+      } else if (!validateNumber) {
+        return Notification("Warning", "Invalid phone number", "warning");
+      } else {
+        return true;
+      }
     } else {
-      return true;
+      if (userName === "" || hospitalName === "" || phoneNumber === "" || filePath === "" || password === "" || confirmPassword === "")
+        return Notification("Warning", "All fields are required", "warning");
+      if (password !== confirmPassword) {
+        return Notification("Warning", "Password didn't match!", "warning");
+      } else if (!validateNumber) {
+        return Notification("Warning", "Invalid phone number", "warning");
+      } else {
+        return true;
+      }
     }
   };
   const handleChange = (e) => {
