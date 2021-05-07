@@ -28,6 +28,9 @@ export default function Header() {
           <Typography variant="h6" className={classes.title}>
             Donate Plasma
           </Typography>
+          <Link to="/">
+            <Button color="inherit">Donor List</Button>
+          </Link>
           <Link to="/login">
             <Button color="inherit">Login</Button>
           </Link>

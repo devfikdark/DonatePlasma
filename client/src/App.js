@@ -5,6 +5,7 @@ import "./App.css";
 import Header from "./components/Header.component";
 import RegisterPage from "./pages/Register.page";
 import LoginPage from "./pages/Login.page";
+import HomePage from "./pages/Home.page";
 
 const theme = createMuiTheme({
   typography: {
@@ -18,6 +19,7 @@ function App() {
       <div className="App">
         <Header />
         <Switch>
+          <Route exact path="/" component={HomePage} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/login" component={LoginPage} />
         </Switch>
