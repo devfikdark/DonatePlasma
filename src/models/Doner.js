@@ -1,18 +1,21 @@
 import mongoose from 'mongoose';
-const HospitalSchema = new mongoose.Schema({
+const DonerSchema = new mongoose.Schema({
+  age: {
+    type: Number,
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
   },
-  website: {
-    type: String,
+  dispatchDate: {
+    type: Date,
   },
-  documents: {
+  bloodGroup: {
     type: String,
   },
   status: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   createAt: {
     type: Date,
@@ -20,7 +23,7 @@ const HospitalSchema = new mongoose.Schema({
 });
 
 // Query middleware
-HospitalSchema.pre(/^find/, function (next) {
+DonerSchema.pre(/^find/, function (next) {
   this.populate({
     path: "user",
     select: "-__v",
@@ -28,8 +31,8 @@ HospitalSchema.pre(/^find/, function (next) {
   next();
 });
 
-if (!mongoose.models.Hospital) {
-  mongoose.model('Hospital', HospitalSchema);
+if (!mongoose.models.Doner) {
+  mongoose.model('Doner', DonerSchema);
 }
 
-export default mongoose.models.Hospital;
+export default mongoose.models.Doner;

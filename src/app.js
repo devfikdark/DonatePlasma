@@ -11,6 +11,11 @@
 
    app.use('/api/v1', router);
 
+ // Docs
+  app.use("/docs", (req, res) => {
+    res.redirect("https://documenter.getpostman.com/view/9978541/TzRRBTKk");
+  });
+
    app.all('*', (req, res, next) => {
      next(new AppError("Can't find " + req.originalUrl + "on this server!", 404));
    });
