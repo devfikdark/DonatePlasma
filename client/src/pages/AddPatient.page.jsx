@@ -79,8 +79,8 @@ function AddPatient() {
               </Grid>
               <Grid item xs={6}>
                 <FormControl variant="outlined" fullWidth>
-                  <InputLabel id="demo-simple-select-outlined-label">Blood Group</InputLabel>
-                  <Select variant="outlined" labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={bloodGroup} onChange={handleBloodGroup} label="Age">
+                  <InputLabel required>Blood Group</InputLabel>
+                  <Select variant="outlined" value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
