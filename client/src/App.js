@@ -10,6 +10,7 @@ import AdminPanelPage from "./pages/AdminPanel.page";
 import DonorProfile from "./pages/DonorProfile.page";
 import HospitalProfile from "./pages/HospitalProfile.page";
 import AddPatient from "./pages/AddPatient.page";
+import NotificationListPage from "./pages/NotificationList.page";
 
 const theme = createMuiTheme({
   typography: {
@@ -30,6 +31,7 @@ function App() {
           <Route exact path="/donor-profile" component={DonorProfile} />
           <Route exact path="/hospital-profile" component={HospitalProfile} />
           <Route exact path="/add-patient" component={AddPatient} />
+          <Route exact path="/notifications" component={NotificationListPage} />
         </Switch>
       </div>
       <NotificationContainer />

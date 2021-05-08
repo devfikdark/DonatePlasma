@@ -150,7 +150,7 @@ export default function RegisterPage() {
             </Grid>
             {registrationType === "individual" && (
               <Grid item xs={12}>
-                <TextField name="name" value={name} onChange={handleChange} variant="outlined" required fullWidth label="First Name" />
+                <TextField name="name" value={name} onChange={handleChange} variant="outlined" required fullWidth label="Full Name" />
               </Grid>
             )}
             {registrationType === "hospital" && (

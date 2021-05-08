@@ -51,6 +51,11 @@ export default function Header() {
               Add Patient
             </Button>
           </Link>
+          <Link to="/notifications">
+            <Button color="inherit" className={classes.buttonStyle}>
+              Notifications
+            </Button>
+          </Link>
           <Link to="/donor-profile">
             <Button color="inherit" className={classes.buttonStyle}>
               Profile
