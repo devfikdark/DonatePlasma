@@ -8,6 +8,7 @@ import LoginPage from "./pages/Login.page";
 import HomePage from "./pages/Home.page";
 import AdminPanelPage from "./pages/AdminPanel.page";
 import DonorProfile from "./pages/DonorProfile.page";
+import HospitalProfile from "./pages/HospitalProfile.page";
 
 const theme = createMuiTheme({
   typography: {
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/pending-hospitals" component={AdminPanelPage} />
           <Route exact path="/donor-profile" component={DonorProfile} />
+          <Route exact path="/hospital-profile" component={HospitalProfile} />
         </Switch>
       </div>
       <NotificationContainer />

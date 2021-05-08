@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Box, Button, Checkbox, Container, FormControlLabel, Grid, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
+import { listOfBloodGroup } from "../utils/constants";
 import Notification from "../components/Notification.component";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,8 +21,12 @@ function DonorProfile() {
   const classes = useStyles();
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [bloodGroup, setBloodGroup] = useState(listOfBloodGroup);
 
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
+  const handleBloodGroup = (e) => {
+    setBloodGroup(e.target.value);
+  };
 
   return (
     <div>
@@ -50,7 +55,17 @@ function DonorProfile() {
               <TextField label="Phone Number" required name="phoneNumber" fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Blood Group" required readOnly name="bloodGroup" fullWidth variant="outlined" />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="demo-simple-select-outlined-label">Blood Group</InputLabel>
+                <Select variant="outlined" labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={bloodGroup} onChange={handleBloodGroup} label="Age">
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={6}>
               <TextField label="Age" required name="age" fullWidth variant="outlined" />
