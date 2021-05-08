@@ -16,6 +16,9 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: ["Quicksand", "sans-serif"].join(","),
   },
+  shape: {
+    borderRadius: 8,
+  },
 });
 
 function App() {

@@ -1,14 +1,33 @@
-import React from "react";
-import { Box, Button, Container, CssBaseline, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DonorList from "../components/DonorList.component";
+import { green } from "@material-ui/core/colors";
+import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(3),
   },
   imgStyle: {
-    borderRadius: 8,
+    borderRadius: 16,
     boxShadow: "14px 17px 14px -7px #A8A8A8",
   },
   formControl: {
@@ -20,10 +39,28 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(2),
   },
+
+  shoutButton: {
+    boxShadow: "0px 10px 28px 5px #9fa8da",
+  },
+
+  confirmShoutButton: {
+    marginLeft: "1em",
+  },
 }));
 
 function Home() {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <CssBaseline />
@@ -31,12 +68,15 @@ function Home() {
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             <Typography variant="h3">Donate Plasma Save Life.</Typography>
-            <Box mt={4}>
+            <Box my={5}>
               <Typography variant="subtitle1">
                 Blood Donation Is The Act Of Giving Blood To Someone Who Needs It. It Is Not Just About Giving Blood, But It Is An Act Of Kindness That Saves The Lives Of Hundreds Of People. These
                 Fifteen Minutes Of Your Life Can Save Someone’s Entire Life.
               </Typography>
             </Box>
+            <Button variant="contained" color="primary" className={classes.shoutButton} endIcon={<RecordVoiceOverIcon />} size="large" onClick={handleClickOpen}>
+              Make a Shout
+            </Button>
           </Grid>
           <Grid item xs={12} md={6}>
             <img
@@ -92,6 +132,33 @@ function Home() {
             <DonorList />
           </Grid>
         </Grid>
+
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+          PaperProps={{
+            style: { borderRadius: 16 },
+          }}>
+          <DialogTitle id="form-dialog-title">Make A Shout</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Shout lets you to give a notification to a number of custom donors based on their location. In this way, donors can be notified though the system.</DialogContentText>
+            <TextField autoFocus margin="dense" label="Name" required fullWidth variant="outlined" />
+            <TextField autoFocus margin="dense" label="Phone Number" required fullWidth variant="outlined" />
+            <TextField autoFocus margin="dense" label="Desired Blood Group" required fullWidth variant="outlined" />
+            <TextField autoFocus margin="dense" label="Desired Area" required fullWidth variant="outlined" />
+
+            <small> N.B: Your name and phone number will be visible to the notified persons. </small>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleClose} color="primary" className={classes.confirmShoutButton}>
+              Make Shout
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </div>
   );

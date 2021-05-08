@@ -107,7 +107,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Welcome back
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField variant="outlined" margin="normal" required fullWidth label="Username" name="userName" value={userName} onChange={handleChange} autoComplete="email" autoFocus />
