@@ -80,7 +80,7 @@ function DonorProfile() {
             <Grid item xs={12}>
               <TextField label="Address" required name="address" fullWidth variant="outlined" rows={4} multiline />
             </Grid>
-            <Button variant="contained" color="primary" fullWidth className={classes.submit}>
+            <Button variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
               {loading ? "Updating profile..." : "Submit"}
             </Button>
           </Grid>

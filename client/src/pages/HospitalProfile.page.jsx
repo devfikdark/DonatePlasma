@@ -51,7 +51,7 @@ function HospitalProfile() {
             <Grid item xs={12}>
               <TextField rows={4} multiline label="Address" required variant="outlined" fullWidth />
             </Grid>
-            <Button variant="contained" color="primary" fullWidth className={classes.submit}>
+            <Button variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
               {loading ? "Updating profile..." : "Submit"}
             </Button>
           </Grid>
