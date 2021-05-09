@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
-import { listOfBloodGroup } from "../utils/constants";
+import { listOfBloodGroup, areaLocation } from "../utils/constants";
 import Notification from "../components/Notification.component";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,11 +21,15 @@ function DonorProfile() {
   const classes = useStyles();
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [bloodGroup, setBloodGroup] = useState(listOfBloodGroup);
+  const [bloodGroup, setBloodGroup] = useState();
+  const [area, setArea] = useState();
 
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
   const handleBloodGroup = (e) => {
     setBloodGroup(e.target.value);
+  };
+  const handleAreaLocation = (e) => {
+    setArea(e.target.value);
   };
 
   return (
@@ -55,20 +59,37 @@ function DonorProfile() {
               <TextField label="Phone Number" required name="phoneNumber" fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
+              <TextField label="Age" required name="age" fullWidth variant="outlined" />
+            </Grid>
+            <Grid item xs={6}>
               <FormControl variant="outlined" fullWidth>
-                <InputLabel id="demo-simple-select-outlined-label">Blood Group</InputLabel>
-                <Select variant="outlined" labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
+                <InputLabel>Blood Group</InputLabel>
+                <Select variant="outlined" value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {listOfBloodGroup.map((el) => (
+                    <MenuItem value={el.id}> {el.name} </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Age" required name="age" fullWidth variant="outlined" />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel required>Select Area</InputLabel>
+                <Select variant="outlined" value={area} onChange={handleAreaLocation} label="Select Area">
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {areaLocation.map((el) => (
+                    <MenuItem value={el.id}> {el.name} </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField label="Address" required name="address" fullWidth variant="outlined" rows={4} multiline />
             </Grid>
             <Grid item xs={6}>
               <FormControlLabel
@@ -76,9 +97,6 @@ function DonorProfile() {
                 label="I am available to donate blood"
                 className={classes.available}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField label="Address" required name="address" fullWidth variant="outlined" rows={4} multiline />
             </Grid>
             <Button variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
               {loading ? "Updating profile..." : "Submit"}

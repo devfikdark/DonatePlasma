@@ -3,7 +3,7 @@ import { Button, Checkbox, Container, FormControl, FormControlLabel, Grid, Input
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { grey, indigo } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
-import { listOfBloodGroup } from "../utils/constants";
+import { listOfBloodGroup, areaLocation } from "../utils/constants";
 import Notification from "../components/Notification.component";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,14 +42,12 @@ function AddPatient() {
   const [showForm, setShowForm] = useState(false);
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [bloodGroup, setBloodGroup] = useState(listOfBloodGroup);
+  const [bloodGroup, setBloodGroup] = useState();
+  const [area, setArea] = useState();
 
-  const handleBloodGroup = (e) => {
-    setBloodGroup(e.target.value);
-  };
-
+  const handleBloodGroup = (e) => setBloodGroup(e.target.value);
+  const handleAreaLocation = (e) => setArea(e.target.value);
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
-
   const toggleAddPatientForm = () => setShowForm(!showForm);
 
   return (
@@ -69,6 +67,9 @@ function AddPatient() {
           <form>
             <Grid container spacing={2} className={classes.margin}>
               <Grid item xs={6}>
+                <TextField label="Username" required variant="outlined" name="userName" fullWidth />
+              </Grid>
+              <Grid item xs={6}>
                 <TextField label="Full Name" required variant="outlined" name="fullName" fullWidth />
               </Grid>
               <Grid item xs={6}>
@@ -84,18 +85,24 @@ function AddPatient() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {listOfBloodGroup.map((el) => (
+                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={6}>
-                <FormControlLabel
-                  control={<Checkbox checked={availability} onChange={handleAvailabilityChange} name="availability" color="primary" />}
-                  label="I am available to donate blood"
-                  className={classes.available}
-                />
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel required>Select Area</InputLabel>
+                  <Select variant="outlined" value={area} onChange={handleAreaLocation} label="Blood Group">
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {areaLocation.map((el) => (
+                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <TextField label="Address" required variant="outlined" name="address" rows={4} multiline fullWidth />
@@ -105,6 +112,13 @@ function AddPatient() {
               </Grid>
               <Grid item xs={6}>
                 <TextField label="Password" type="password" required variant="outlined" name="password" fullWidth />
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  control={<Checkbox checked={availability} onChange={handleAvailabilityChange} name="availability" color="primary" />}
+                  label="I am available to donate blood"
+                  className={classes.available}
+                />
               </Grid>
               <Button variant="contained" color="primary" fullWidth className={classes.submit}>
                 {loading ? "Updating profile..." : "Submit"}
