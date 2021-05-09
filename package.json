@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/user/projectname#readme",
   "dependencies": {
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
@@ -28,6 +29,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "fuzzy-search": "^3.2.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.2"
   },
