@@ -56,11 +56,21 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [area, setArea] = useState();
   const [bloodGroup, setBloodGroup] = useState();
+  const [shoutInformation, setShoutInformation] = useState({
+    name: "",
+    phoneNumber: "",
+  });
+  const { name, phoneNumber } = shoutInformation;
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleBloodGroup = (e) => setBloodGroup(e.target.value);
   const handleAreaLocation = (e) => setArea(e.target.value);
+  const handleChange = (e) => setShoutInformation({ ...shoutInformation, [e.target.name]: e.target.value });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div>
@@ -148,23 +158,45 @@ function Home() {
             style: { borderRadius: 16 },
           }}>
           <DialogTitle id="form-dialog-title">Make A Shout</DialogTitle>
-          <DialogContent>
-            <DialogContentText>Shout lets you to give a notification to a number of custom donors based on their location. In this way, donors can be notified though the system.</DialogContentText>
-            <TextField autoFocus margin="dense" label="Name" required fullWidth variant="outlined" />
-            <TextField margin="dense" label="Phone Number" required fullWidth variant="outlined" />
-            <TextField margin="dense" label="Desired Blood Group" required fullWidth variant="outlined" />
-            <TextField margin="dense" label="Desired Area" required fullWidth variant="outlined" />
+          <form onSubmit={handleSubmit}>
+            <DialogContent>
+              <DialogContentText>Shout lets you to give a notification to a number of custom donors based on their location. In this way, donors can be notified though the system.</DialogContentText>
+              <TextField autoFocus margin="dense" label="Name" name="name" value={name} onChange={handleChange} required fullWidth variant="outlined" />
+              <TextField margin="dense" label="Phone Number" name="phoneNumber" value={phoneNumber} onChange={handleChange} required fullWidth variant="outlined" />
+              <FormControl fullWidth variant="outlined" margin="dense">
+                <InputLabel>Select Area</InputLabel>
+                <Select value={area} onChange={handleAreaLocation} label="Blood Group">
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {areaLocation.map((el) => (
+                    <MenuItem value={el.id}> {el.name} </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth variant="outlined" margin="dense">
+                <InputLabel>Blood Group</InputLabel>
+                <Select value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {listOfBloodGroup.map((el) => (
+                    <MenuItem value={el.id}> {el.name} </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-            <small> N.B: Your name and phone number will be visible to the notified persons. </small>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={handleClose} color="primary" className={classes.confirmShoutButton}>
-              Make Shout
-            </Button>
-          </DialogActions>
+              <small> N.B: Your name and phone number will be visible to the notified persons. </small>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="secondary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary" className={classes.confirmShoutButton}>
+                Make Shout
+              </Button>
+            </DialogActions>
+          </form>
         </Dialog>
       </Container>
     </div>

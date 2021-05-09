@@ -23,7 +23,16 @@ function DonorProfile() {
   const [loading, setLoading] = useState(false);
   const [bloodGroup, setBloodGroup] = useState();
   const [area, setArea] = useState();
+  const [donorProfileInformation, setDonorProfileInformation] = useState({
+    userName: "",
+    fullName: "",
+    phoneNumber: "",
+    age: "",
+    address: "",
+  });
+  const { userName, fullName, phoneNumber, age, address } = donorProfileInformation;
 
+  const handleChange = (e) => setDonorProfileInformation({ ...donorProfileInformation, [e.target.name]: e.target.value });
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
   const handleBloodGroup = (e) => {
     setBloodGroup(e.target.value);
@@ -32,10 +41,14 @@ function DonorProfile() {
     setArea(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
       <Container maxWidth="lg">
-        <form fullWidth>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Alert severity="warning" className={classes.margin}>
@@ -50,16 +63,16 @@ function DonorProfile() {
             </Grid>
 
             <Grid item xs={6}>
-              <TextField label="Username" required readOnly name="username" fullWidth variant="outlined" />
+              <TextField label="Username" required readOnly name="userName" value={userName} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Full Name" required readOnly name="fullName" fullWidth variant="outlined" />
+              <TextField label="Full Name" required readOnly name="fullName" value={fullName} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Phone Number" required name="phoneNumber" fullWidth variant="outlined" />
+              <TextField label="Phone Number" required name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Age" required name="age" fullWidth variant="outlined" />
+              <TextField label="Age" required name="age" value={age} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
               <FormControl variant="outlined" fullWidth>
@@ -89,7 +102,7 @@ function DonorProfile() {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField label="Address" required name="address" fullWidth variant="outlined" rows={4} multiline />
+              <TextField label="Address" required name="address" value={address} onChange={handleChange} fullWidth variant="outlined" rows={4} multiline />
             </Grid>
             <Grid item xs={6}>
               <FormControlLabel
@@ -98,7 +111,7 @@ function DonorProfile() {
                 className={classes.available}
               />
             </Grid>
-            <Button variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
+            <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
               {loading ? "Updating profile..." : "Submit"}
             </Button>
           </Grid>

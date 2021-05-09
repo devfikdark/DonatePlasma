@@ -44,11 +44,27 @@ function AddPatient() {
   const [loading, setLoading] = useState(false);
   const [bloodGroup, setBloodGroup] = useState();
   const [area, setArea] = useState();
+  const [patientInformation, setPatientInformation] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    age: "",
+    address: "",
+    userName: "",
+    password: "",
+  });
 
+  const { firstName, lastName, phoneNumber, age, address, userName, password } = patientInformation;
+
+  const handleChange = (e) => setPatientInformation({ ...patientInformation, [e.target.name]: e.target.value });
   const handleBloodGroup = (e) => setBloodGroup(e.target.value);
   const handleAreaLocation = (e) => setArea(e.target.value);
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
   const toggleAddPatientForm = () => setShowForm(!showForm);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div>
@@ -64,19 +80,19 @@ function AddPatient() {
         </Grid>
 
         {showForm && (
-          <form>
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={2} className={classes.margin}>
               <Grid item xs={6}>
-                <TextField label="Username" required variant="outlined" name="userName" fullWidth />
+                <TextField label="First Name" required variant="outlined" name="firstName" value={firstName} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <TextField label="Full Name" required variant="outlined" name="fullName" fullWidth />
+                <TextField label="Last Name" required variant="outlined" name="lastName" value={lastName} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <TextField label="Phone Number" type="number" required variant="outlined" name="phoneNumber" fullWidth />
+                <TextField label="Phone Number" type="number" required variant="outlined" name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <TextField label="Age" type="number" required variant="outlined" name="age" fullWidth />
+                <TextField label="Age" type="number" required variant="outlined" name="age" value={age} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
                 <FormControl variant="outlined" fullWidth>
@@ -105,13 +121,13 @@ function AddPatient() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <TextField label="Address" required variant="outlined" name="address" rows={4} multiline fullWidth />
+                <TextField label="Address" required variant="outlined" name="address" rows={4} value={address} onChange={handleChange} multiline fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <TextField label="Username" required variant="outlined" name="userName" fullWidth />
+                <TextField label="Username" required variant="outlined" name="userName" value={userName} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <TextField label="Password" type="password" required variant="outlined" name="password" fullWidth />
+                <TextField label="Password" type="password" required variant="outlined" name="password" value={password} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
                 <FormControlLabel
@@ -120,7 +136,7 @@ function AddPatient() {
                   className={classes.available}
                 />
               </Grid>
-              <Button variant="contained" color="primary" fullWidth className={classes.submit}>
+              <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit}>
                 {loading ? "Updating profile..." : "Submit"}
               </Button>
             </Grid>
