@@ -140,8 +140,8 @@ export default function RegisterPage() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <RadioGroup aria-label="registration-type" name="registrationType" value={registrationType} onChange={handleChange}>
-                <FormControlLabel value="individual" control={<Radio />} label="Individual" />
-                <FormControlLabel value="hospital" control={<Radio />} label="Hospital" />
+                <FormControlLabel value="individual" control={<Radio color="primary" />} label="Individual" />
+                <FormControlLabel value="hospital" control={<Radio color="primary" />} label="Hospital" />
               </RadioGroup>
             </Grid>
             <Grid item xs={12}>
