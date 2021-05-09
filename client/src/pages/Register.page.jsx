@@ -3,7 +3,7 @@ import { Avatar, Grid, Typography, Container, CssBaseline, TextField, Button, Ci
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { indigo } from "@material-ui/core/colors";
 import { Link, useHistory } from "react-router-dom";
-import AttachmentIcon from "@material-ui/icons/Attachment";
+import AttachFileRoundedIcon from "@material-ui/icons/AttachFileRounded";
 import { makeStyles } from "@material-ui/core/styles";
 import Notification from "../components/Notification.component";
 import axios from "axios";
@@ -163,7 +163,7 @@ export default function RegisterPage() {
             </Grid>
             {registrationType === "hospital" && (
               <Grid item xs={12}>
-                <Button variant="contained" component="label" startIcon={<AttachmentIcon />} className={classes.fileButton}>
+                <Button variant="outlined" color="primary" component="label" startIcon={<AttachFileRoundedIcon />} className={classes.fileButton}>
                   File Input
                   <input type="file" hidden name="encryptFile" onChange={handleFileChange} />
                 </Button>

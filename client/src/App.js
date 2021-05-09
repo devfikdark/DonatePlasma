@@ -1,6 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { NotificationContainer } from "react-notifications";
+import { blue } from "@material-ui/core/colors";
 import "./App.css";
 import Header from "./components/Header.component";
 import RegisterPage from "./pages/Register.page";
@@ -11,6 +12,7 @@ import DonorProfile from "./pages/DonorProfile.page";
 import HospitalProfile from "./pages/HospitalProfile.page";
 import AddPatient from "./pages/AddPatient.page";
 import NotificationListPage from "./pages/NotificationList.page";
+const customBlue = blue["A400"];
 
 const theme = createMuiTheme({
   typography: {
@@ -18,6 +20,11 @@ const theme = createMuiTheme({
   },
   shape: {
     borderRadius: 8,
+  },
+  palette: {
+    primary: {
+      main: customBlue,
+    },
   },
 });
 

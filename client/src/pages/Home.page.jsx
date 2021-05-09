@@ -19,8 +19,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DonorList from "../components/DonorList.component";
-import { green } from "@material-ui/core/colors";
-import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
+import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
+import FilterListRoundedIcon from "@material-ui/icons/FilterListRounded";
+import RecordVoiceOverRoundedIcon from "@material-ui/icons/RecordVoiceOverRounded";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   shoutButton: {
-    boxShadow: "0px 10px 28px 5px #9fa8da",
+    boxShadow: "0px 8px 16px 0px #82b1ff",
   },
 
   confirmShoutButton: {
@@ -74,7 +75,7 @@ function Home() {
                 Fifteen Minutes Of Your Life Can Save Someone’s Entire Life.
               </Typography>
             </Box>
-            <Button variant="contained" color="primary" className={classes.shoutButton} endIcon={<RecordVoiceOverIcon />} size="large" onClick={handleClickOpen}>
+            <Button variant="contained" color="primary" className={classes.shoutButton} endIcon={<RecordVoiceOverRoundedIcon />} size="large" onClick={handleClickOpen}>
               Make a Shout
             </Button>
           </Grid>
@@ -114,14 +115,14 @@ function Home() {
                     <MenuItem value={30}>Thirty</MenuItem>
                   </Select>
                 </FormControl>
-                <Button variant="contained" color="primary" disableElevation className={classes.filterButton} size="small">
+                <Button variant="contained" color="primary" disableElevation className={classes.filterButton} size="small" endIcon={<FilterListRoundedIcon />}>
                   Filter
                 </Button>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box display="flex" justifyContent="flex-end" alignItems="center">
                   <TextField label="Search" />
-                  <Button variant="contained" color="primary" className={classes.filterButton} size="small" disableElevation>
+                  <Button variant="contained" color="primary" className={classes.filterButton} size="small" disableElevation endIcon={<SearchRoundedIcon />}>
                     Search
                   </Button>
                 </Box>
@@ -144,9 +145,9 @@ function Home() {
           <DialogContent>
             <DialogContentText>Shout lets you to give a notification to a number of custom donors based on their location. In this way, donors can be notified though the system.</DialogContentText>
             <TextField autoFocus margin="dense" label="Name" required fullWidth variant="outlined" />
-            <TextField autoFocus margin="dense" label="Phone Number" required fullWidth variant="outlined" />
-            <TextField autoFocus margin="dense" label="Desired Blood Group" required fullWidth variant="outlined" />
-            <TextField autoFocus margin="dense" label="Desired Area" required fullWidth variant="outlined" />
+            <TextField margin="dense" label="Phone Number" required fullWidth variant="outlined" />
+            <TextField margin="dense" label="Desired Blood Group" required fullWidth variant="outlined" />
+            <TextField margin="dense" label="Desired Area" required fullWidth variant="outlined" />
 
             <small> N.B: Your name and phone number will be visible to the notified persons. </small>
           </DialogContent>
