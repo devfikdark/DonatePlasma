@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Avatar, Grid, Typography, Container, CssBaseline, TextField, Button, CircularProgress, RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { indigo } from "@material-ui/core/colors";
 import { Link, useHistory } from "react-router-dom";
 import AttachFileRoundedIcon from "@material-ui/icons/AttachFileRounded";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,16 +21,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.primary.main,
   },
+  redirect: {
+    color: theme.palette.primary.main,
+    fontWeight: 500,
+  },
   form: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    backgroundColor: indigo[800],
-    "&:hover": {
-      backgroundColor: indigo[900],
-    },
   },
 
   wrapper: {
@@ -185,8 +184,8 @@ export default function RegisterPage() {
           </div>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/login" variant="body2">
-                Already have an account? Sign in
+              <Link to="/login" variant="body2" className={classes.redirect}>
+                Already have an account? Sign In
               </Link>
             </Grid>
           </Grid>

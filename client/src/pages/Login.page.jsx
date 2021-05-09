@@ -4,7 +4,6 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import { Link, useHistory } from "react-router-dom";
-import { indigo } from "@material-ui/core/colors";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -34,16 +33,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.primary.main,
   },
+  redirect: {
+    color: theme.palette.primary.main,
+    fontWeight: 500,
+  },
   form: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    backgroundColor: indigo[700],
-    "&:hover": {
-      backgroundColor: indigo[900],
-    },
   },
 }));
 
@@ -117,7 +116,7 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/register" variant="body2">
+                <Link to="/register" variant="body2" className={classes.redirect}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
