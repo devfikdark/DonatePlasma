@@ -44,9 +44,9 @@ function HospitalProfile() {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Alert severity="warning" className={classes.margin}>
-                <AlertTitle>Warning</AlertTitle>
-                <Typography variant="body1">Your profile is not ready yet. Please update your profile to get add patient as donor.</Typography>
+              <Alert severity="error" className={classes.margin}>
+                <AlertTitle>Pending Request</AlertTitle>
+                <Typography variant="body1"> Your request is being processed. Please wait until admin confirms your account. </Typography>
               </Alert>
             </Grid>
             <Grid item xs={12}>

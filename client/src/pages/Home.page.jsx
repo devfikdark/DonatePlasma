@@ -86,7 +86,7 @@ function Home() {
               </Typography>
             </Box>
             <Button variant="contained" color="primary" className={classes.shoutButton} endIcon={<RecordVoiceOverRoundedIcon />} size="large" onClick={handleClickOpen}>
-              Make a Shout
+              Ask For Plasma
             </Button>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -157,10 +157,12 @@ function Home() {
           PaperProps={{
             style: { borderRadius: 16 },
           }}>
-          <DialogTitle id="form-dialog-title">Make A Shout</DialogTitle>
+          <DialogTitle id="form-dialog-title">Ask for Plasma</DialogTitle>
           <form onSubmit={handleSubmit}>
             <DialogContent>
-              <DialogContentText>Shout lets you to give a notification to a number of custom donors based on their location. In this way, donors can be notified though the system.</DialogContentText>
+              <DialogContentText style={{ fontWeight: 500 }}>
+                This feature lets you to give a notification to selected donors based on their location and blood group. In this way, donors can be notified through the system.
+              </DialogContentText>
               <TextField autoFocus margin="dense" label="Name" name="name" value={name} onChange={handleChange} required fullWidth variant="outlined" />
               <TextField margin="dense" label="Phone Number" name="phoneNumber" value={phoneNumber} onChange={handleChange} required fullWidth variant="outlined" />
               <FormControl fullWidth variant="outlined" margin="dense">

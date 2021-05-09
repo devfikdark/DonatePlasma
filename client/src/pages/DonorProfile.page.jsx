@@ -51,7 +51,7 @@ function DonorProfile() {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Alert severity="warning" className={classes.margin}>
+              <Alert severity="error" className={classes.margin}>
                 <AlertTitle>Warning</AlertTitle>
                 <Typography variant="body1">Your profile is not ready yet. Please update your profile to get yourself on the donor list.</Typography>
               </Alert>
