@@ -22,6 +22,7 @@ import DonorList from "../components/DonorList.component";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
 import FilterListRoundedIcon from "@material-ui/icons/FilterListRounded";
 import RecordVoiceOverRoundedIcon from "@material-ui/icons/RecordVoiceOverRounded";
+import { areaLocation, listOfBloodGroup } from "../utils/constants";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -53,14 +54,13 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [area, setArea] = useState();
+  const [bloodGroup, setBloodGroup] = useState();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleBloodGroup = (e) => setBloodGroup(e.target.value);
+  const handleAreaLocation = (e) => setArea(e.target.value);
 
   return (
     <div>
@@ -100,19 +100,25 @@ function Home() {
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                  <Select labelId="demo-simple-select-label" id="demo-simple-select">
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                  <InputLabel>Select Area</InputLabel>
+                  <Select value={area} onChange={handleAreaLocation} label="Blood Group">
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {areaLocation.map((el) => (
+                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                  <Select labelId="demo-simple-select-label" id="demo-simple-select">
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                  <InputLabel>Blood Group</InputLabel>
+                  <Select value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {listOfBloodGroup.map((el) => (
+                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 <Button variant="contained" color="primary" disableElevation className={classes.filterButton} size="small" endIcon={<FilterListRoundedIcon />}>
