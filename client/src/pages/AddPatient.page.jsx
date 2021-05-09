@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, TextField, Tooltip } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { grey, indigo } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { listOfBloodGroup } from "../utils/constants";
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   available: {
-    marginTop: 10,
+    marginTop: 8,
   },
   icon: {
     fontSize: "3em",
@@ -59,7 +59,7 @@ function AddPatient() {
           <Tooltip title="Add new donor">
             <Grid item xs={2}>
               <Paper elevation={0} className={classes.paper} onClick={toggleAddPatientForm}>
-                <AddIcon className={classes.icon} />
+                <AddRoundedIcon className={classes.icon} />
               </Paper>
             </Grid>
           </Tooltip>

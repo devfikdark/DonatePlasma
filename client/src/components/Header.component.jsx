@@ -29,7 +29,7 @@ export default function Header() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Donate Plasma
+            <Link to="/">Donate Plasma</Link>
           </Typography>
           <Link to="/">
             <Button color="inherit" className={classes.buttonStyle}>

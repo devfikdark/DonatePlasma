@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
   },
   available: {
-    marginTop: 10,
+    marginTop: 8,
   },
   submit: {
     margin: theme.spacing(3),
