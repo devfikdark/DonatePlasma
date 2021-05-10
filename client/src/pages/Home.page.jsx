@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -23,6 +23,9 @@ import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
 import FilterListRoundedIcon from "@material-ui/icons/FilterListRounded";
 import RecordVoiceOverRoundedIcon from "@material-ui/icons/RecordVoiceOverRounded";
 import { areaLocation, listOfBloodGroup } from "../utils/constants";
+import Notification from "../components/Notification.component";
+import empty from "../images/nodata.svg";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,7 +39,12 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
-
+  emptyLayout: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
   filterButton: {
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(2),
@@ -56,6 +64,7 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [area, setArea] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
+  const [donorList, setDonorList] = useState([]);
   const [shoutInformation, setShoutInformation] = useState({
     name: "",
     phoneNumber: "",
@@ -70,6 +79,61 @@ function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  };
+
+  const getDonorList = () => {
+    axios
+      .get(`/doner/list`)
+      .then((res) => {
+        console.log(res);
+        setDonorList(res.data.data);
+      })
+      .catch((err) => {
+        if (err.response.data.message) {
+          Notification("Error", `${err.response.data.message}`, "error");
+        } else {
+          Notification("Error", "Something went wrong. Please check your internet connection", "error");
+        }
+      });
+  };
+
+  useEffect(() => getDonorList(), []);
+
+  const filterDonors = () => {
+    let endPoint = "";
+    let blood = bloodGroup.split("");
+    const groupName = blood[0];
+    let group = blood[1];
+    if (group === "+") {
+      group = 1;
+    } else {
+      group = 2;
+    }
+    console.log(bloodGroup);
+    if (bloodGroup !== "") {
+      endPoint = `/doner/list?bloodGroup=${groupName}&group=${group}`;
+    } else if (area !== "") {
+      endPoint = `/doner/list?area=${area}`;
+    } else if (bloodGroup !== "" && area !== "") {
+      endPoint = `/doner/list?bloodGroup=${groupName}&group=${group}&area=${area}`;
+    } else {
+      endPoint = `/doner/list`;
+    }
+    // console.log(groupId);
+
+    axios
+      .get(endPoint)
+      .then((res) => {
+        console.log(res.data.data);
+        setDonorList(res.data.data);
+      })
+      .catch((err) => {
+        if (err.response.data.message) {
+          Notification("Error", `${err.response.data.message}`, "error");
+        } else {
+          Notification("Error", "Something went wrong. Please check your internet connection", "error");
+        }
+      });
   };
 
   return (
@@ -135,7 +199,7 @@ function Home() {
                     ))}
                   </Select>
                 </FormControl>
-                <Button variant="contained" color="primary" disableElevation className={classes.filterButton} size="small" endIcon={<FilterListRoundedIcon />}>
+                <Button variant="contained" color="primary" disableElevation className={classes.filterButton} size="small" endIcon={<FilterListRoundedIcon />} onClick={filterDonors}>
                   Filter
                 </Button>
               </Grid>
@@ -150,7 +214,14 @@ function Home() {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <DonorList />
+            {donorList.length !== 0 ? (
+              <DonorList donorList={donorList} />
+            ) : (
+              <div className={classes.emptyLayout}>
+                <img src={empty} alt="empty" width="200" height="100%" />
+                <Typography variant="h5">No pending hospitals</Typography>
+              </div>
+            )}
           </Grid>
         </Grid>
 
@@ -176,7 +247,9 @@ function Home() {
                     <em>None</em>
                   </MenuItem>
                   {areaLocation.map((el) => (
-                    <MenuItem value={el.id}> {el.name} </MenuItem>
+                    <MenuItem key={el.id} value={el.id}>
+                      {el.name}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -187,7 +260,9 @@ function Home() {
                     <em>None</em>
                   </MenuItem>
                   {listOfBloodGroup.map((el) => (
-                    <MenuItem value={el.id}> {el.name} </MenuItem>
+                    <MenuItem key={el.id} value={el.id}>
+                      {el.name}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
