@@ -30,7 +30,7 @@ function DonorProfile() {
     phoneNumber: "",
     age: "",
     address: "",
-    isComplete: false,
+    isComplete: true,
   });
   const { userName, fullName, phoneNumber, age, address, isComplete } = donorProfileInformation;
 
@@ -42,7 +42,10 @@ function DonorProfile() {
   const handleAreaLocation = (e) => {
     setArea(e.target.value);
   };
-
+  const handleValidation = (e) => {
+    if (area === "" || bloodGroup === "") return Notification("Warning", "Area and blood group is required", "warning");
+    return true;
+  };
   const getDonorInformation = () => {
     axios
       .get(`/doner/${localStorage.getItem("id")}`, {
@@ -57,13 +60,13 @@ function DonorProfile() {
           userName: info.user.userName,
           fullName: info.user.name,
           phoneNumber: info.user.phone,
-          age: info.user.age || "",
+          age: info.age || "",
           address: info.user.address,
           isComplete: info.isComplete,
         });
         setAvailability(info.status);
-        // setArea()
-        // setBloodGroup()
+        setArea(info.area);
+        setBloodGroup(info.bloodGroup);
       })
       .catch((err) => {
         console.log(err);
@@ -79,6 +82,40 @@ function DonorProfile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    if (handleValidation()) {
+      const information = {
+        userName: userName,
+        name: fullName,
+        phone: phoneNumber,
+        age: age,
+        address: address,
+        bloodGroup: bloodGroup,
+        area: area,
+        status: availability,
+      };
+
+      axios
+        .patch(`/doner/${localStorage.getItem("id")}/modify`, information, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          Notification("Success", "Profile updated successfully", "success");
+          getDonorInformation();
+        })
+        .catch((err) => {
+          if (err.response.data.message) {
+            Notification("Error", `${err.response.data.message}`, "error");
+          } else {
+            Notification("Error", "Something went wrong. Please check your internet connection", "error");
+          }
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   };
 
   return (
@@ -110,7 +147,7 @@ function DonorProfile() {
               <TextField label="Phone Number" required name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Age" required name="age" value={age} onChange={handleChange} fullWidth variant="outlined" />
+              <TextField label="Age" type="number" required name="age" value={age} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
               <FormControl variant="outlined" fullWidth>

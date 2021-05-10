@@ -26,7 +26,7 @@ function HospitalProfile() {
     phoneNumber: "",
     websiteName: "",
     address: "",
-    status: "",
+    status: true,
   });
   const { hospitalUserName, hospitalName, phoneNumber, websiteName, address, status } = hospitalProfile;
 
@@ -54,7 +54,7 @@ function HospitalProfile() {
           hospitalUserName: info.user.userName,
           hospitalName: info.user.name,
           phoneNumber: info.user.phone,
-          websiteName: info.user.website || "",
+          websiteName: info.website || "",
           address: info.user.address || "",
         });
       })
