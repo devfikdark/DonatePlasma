@@ -18,3 +18,53 @@ export const hospitalList = catchAsync(async (req, res, next) => {
     confirmedList: HospitalInfo(confirmedList),
   });
 });
+
+export const getHospital = catchAsync(async (req, res, next) => {
+    res.setHeader("Content-type", "application/json");
+  
+    const hospitalInfo = await Hospital.findById(req.params.hid);
+    hospitalInfo._doc.donerCount = hospitalInfo.donerList.length;
+    hospitalInfo.donerList = undefined;
+    return sendData(res, hospitalInfo);
+});
+
+export const activeHospital = catchAsync(async (req, res, next) => {
+    res.setHeader("Content-type", "application/json");
+  
+    const { status } = req.body;
+
+    const hospitalInfo = await Hospital.findById(req.params.hid);
+    hospitalInfo.status = status;
+    await hospitalInfo.save();
+
+    return sendMessage(res, 'Account active successfully');
+});
+
+export const modifyHospital = catchAsync(async (req, res, next) => {
+    res.setHeader("Content-type", "application/json");
+  
+    const { userName, name, phone, website, address } = req.body;
+    if (!userName) return next(new AppError("Provide hospital userName.", 400));
+    if (!name) return next(new AppError("Provide hospital name.", 400));
+    if (!phone) return next(new AppError("Provide hospital phone.", 400));
+
+    // hospital
+    const hospitalInfo = await Hospital.findById(req.params.hid);
+    if (!hospitalInfo) return next(new AppError("Hospital not found", 404));
+
+    hospitalInfo.website = website;
+    await hospitalInfo.save();
+
+    // user
+    const userInfo = await User.findById(hospitalInfo.user);
+    if (!userInfo) return next(new AppError("Hospital not found", 404));
+
+    userInfo.userName = userName;
+    userInfo.name = name;
+    userInfo.phone = phone;
+    userInfo.address = address;
+
+    await userInfo.save();
+
+    return sendMessage(res, 'Modify hospital info');
+});
