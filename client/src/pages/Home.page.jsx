@@ -116,7 +116,9 @@ function Home() {
                       <em>None</em>
                     </MenuItem>
                     {areaLocation.map((el) => (
-                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                      <MenuItem key={el.id} value={el.id}>
+                        {el.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -127,7 +129,9 @@ function Home() {
                       <em>None</em>
                     </MenuItem>
                     {listOfBloodGroup.map((el) => (
-                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                      <MenuItem key={el.id} value={el.id}>
+                        {el.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
