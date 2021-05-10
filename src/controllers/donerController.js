@@ -34,3 +34,11 @@ export const donerList = catchAsync(async (req, res, next) => {
 
   return sendData(res, DonerInfo(docs));
 });
+
+export const getDoner = catchAsync(async (req, res, next) => {
+  res.setHeader("Content-type", "application/json");
+
+  const donerInfo = await Doner.findById(req.params.did);
+
+  return sendData(res, donerInfo);
+});

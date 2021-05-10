@@ -18,3 +18,12 @@ export const hospitalList = catchAsync(async (req, res, next) => {
     confirmedList: HospitalInfo(confirmedList),
   });
 });
+
+export const getHospital = catchAsync(async (req, res, next) => {
+    res.setHeader("Content-type", "application/json");
+  
+    const hospitalInfo = await Hospital.findById(req.params.hid);
+    hospitalInfo._doc.donerCount = hospitalInfo.donerList.length;
+    hospitalInfo.donerList = undefined;
+    return sendData(res, hospitalInfo);
+});
