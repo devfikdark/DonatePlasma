@@ -6,6 +6,6 @@ import authorizedUser from '../middlewares/authorizedUser';
 
 const router = express.Router();
 
-router.get('/list', authorizedUser, donerList);
+router.get('/list', donerList);
 
 export default router;
