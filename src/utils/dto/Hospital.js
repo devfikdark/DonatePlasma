@@ -1,16 +1,15 @@
-const DonerInfo = (report) => {
+const HospitalInfo = (report) => {
     const data = [];
     for (let i = 0; i < report.length; i += 1) {
       const el = report[i];
       data.push({
         "_id": el._id,
         "name": el.user.name,
-        "age": el.age,
-        "bloodGroup": el.bloodGroup,
-        "area": el.area,
+        "phone": el.user.phone,
+        "documents": el.documents,
       });
     }
     return data;
   };
   
-  export default DonerInfo;
+  export default HospitalInfo;
