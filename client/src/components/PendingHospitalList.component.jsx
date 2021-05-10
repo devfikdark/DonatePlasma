@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Card, CardContent, CircularProgress, Divider, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import Notification from "./Notification.component";
 import axios from "axios";
 import empty from "../images/nodata.svg";
 
@@ -22,9 +23,10 @@ const useStyles = makeStyles((theme) => ({
 const PendingHospitalList = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [pendingHospitals, setPendingHospitals] = useState([]);
 
-  useEffect(() => {
+  const fetchPendingHospitalList = () => {
     setLoading(true);
     axios
       .get("/hospital/list", {
@@ -44,7 +46,36 @@ const PendingHospitalList = () => {
         }
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchPendingHospitalList();
   }, []);
+
+  const confirmHospital = (id) => {
+    console.log(id);
+    setConfirmLoading(true);
+    axios
+      .post(`/hospital/profile/${id}/modify`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        Notification("Success", "You've confirmed the hospital", "success");
+        fetchPendingHospitalList();
+      })
+      .catch((err) => {
+        if (err.response.data.message) {
+          Notification("Error", `${err.response.data.message}`, "error");
+        } else {
+          Notification("Error", "Something went wrong. Please check your internet connection", "error");
+        }
+      })
+      .finally(() => setConfirmLoading(false));
+  };
+
   return (
     <div>
       <Grid container spacing={2} className={classes.layout}>
@@ -67,8 +98,8 @@ const PendingHospitalList = () => {
                           <Typography variant="subtitle1">{el.phone}</Typography>
                           <Divider />
                           <Box mt={3}>
-                            <Button variant="contained" color="primary" disableElevation className={classes.buttonStyle} size="small">
-                              Confirm
+                            <Button variant="contained" color="primary" disableElevation className={classes.buttonStyle} size="small" onClick={() => confirmHospital(el._id)} disabled={confirmLoading}>
+                              {confirmLoading ? "Confirming..." : "Confirm"}
                             </Button>
                             <Button variant="outlined" color="secondary" size="small">
                               Decline

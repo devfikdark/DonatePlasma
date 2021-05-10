@@ -61,7 +61,8 @@ export default function ConfirmedHospitalList() {
             <TableHead>
               <TableRow>
                 <TableCell>Name </TableCell>
-                <TableCell align="right">Phone</TableCell>
+                <TableCell> Number of Donors</TableCell>
+                <TableCell>Phone</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -70,7 +71,8 @@ export default function ConfirmedHospitalList() {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="right">{row.phone}</TableCell>
+                  <TableCell>{row.donerCount}</TableCell>
+                  <TableCell>{row.phone}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
