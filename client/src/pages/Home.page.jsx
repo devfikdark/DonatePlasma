@@ -24,6 +24,7 @@ import FilterListRoundedIcon from "@material-ui/icons/FilterListRounded";
 import RecordVoiceOverRoundedIcon from "@material-ui/icons/RecordVoiceOverRounded";
 import { areaLocation, listOfBloodGroup } from "../utils/constants";
 import Notification from "../components/Notification.component";
+import FuzzySearch from "fuzzy-search";
 import empty from "../images/nodata.svg";
 import axios from "axios";
 
@@ -64,7 +65,9 @@ function Home() {
   const [open, setOpen] = useState(false);
   const [area, setArea] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
+  const [search, setSearch] = useState("");
   const [donorList, setDonorList] = useState([]);
+  const [filteredDataset, setFilteredDataset] = useState([]);
   const [shoutInformation, setShoutInformation] = useState({
     name: "",
     phoneNumber: "",
@@ -87,6 +90,7 @@ function Home() {
       .then((res) => {
         console.log(res);
         setDonorList(res.data.data);
+        setFilteredDataset(res.data.data);
       })
       .catch((err) => {
         if (err.response.data.message) {
@@ -134,6 +138,21 @@ function Home() {
           Notification("Error", "Something went wrong. Please check your internet connection", "error");
         }
       });
+  };
+
+  const searcher = new FuzzySearch(filteredDataset, ["name", "phone", "area", "bloodGroup"], { sort: true });
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log(search);
+    if (search) {
+      const result = searcher.search(search);
+      console.log(result);
+      setDonorList([...result]);
+    } else {
+      console.log(filteredDataset);
+      setDonorList(filteredDataset);
+    }
   };
 
   return (
@@ -204,12 +223,14 @@ function Home() {
                 </Button>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Box display="flex" justifyContent="flex-end" alignItems="center">
-                  <TextField label="Search" />
-                  <Button variant="contained" color="primary" className={classes.filterButton} size="small" disableElevation endIcon={<SearchRoundedIcon />}>
-                    Search
-                  </Button>
-                </Box>
+                <form onSubmit={handleSearch}>
+                  <Box display="flex" justifyContent="flex-end" alignItems="center">
+                    <TextField label="Search" name="search" value={search} onChange={(e) => setSearch(e.target.value)} />
+                    <Button type="submit" variant="contained" color="primary" className={classes.filterButton} size="small" disableElevation endIcon={<SearchRoundedIcon />} onClick={handleSearch}>
+                      Search
+                    </Button>
+                  </Box>
+                </form>
               </Grid>
             </Grid>
           </Grid>
@@ -218,8 +239,7 @@ function Home() {
               <DonorList donorList={donorList} />
             ) : (
               <div className={classes.emptyLayout}>
-                <img src={empty} alt="empty" width="200" height="100%" />
-                <Typography variant="h5">No pending hospitals</Typography>
+                <Typography variant="h5">No result found for '{search}' </Typography>
               </div>
             )}
           </Grid>
