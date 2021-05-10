@@ -12,7 +12,7 @@ import sendMessage from "../utils/responses/sendMessage";
 export const signUpUser = catchAsync(async (req, res, next) => {
   res.setHeader("Content-type", "application/json");
 
-  const { user, doner } = req.body;
+  const { user, doner, hospital } = req.body;
 
   if (!user.userName) return next(new AppError("Provide your userName.", 400));
   if (!user.name) return next(new AppError("Provide your name.", 400));
@@ -40,6 +40,13 @@ export const signUpUser = catchAsync(async (req, res, next) => {
     createAt: Date.now(),
   })
   if (!donerInfo) return next(new AppError("Somthing went wrong to create doner."));
+
+  // check hospital
+  if (hospital) {
+    const hospitalInfo = await Hospital.findById(hospital);
+    hospitalInfo.donerList.push(donerInfo.id);
+    await hospitalInfo.save();
+  }
 
   return sendMessage(res, 'Doner created successfully');
 });
@@ -129,6 +136,8 @@ export const signIn = catchAsync(async (req, res, next) => {
     const hospitalInfo = await Hospital.findOne({ user: userInfo._id });
     hospitalInfo._doc.token = createJWT(userInfo._id);
     hospitalInfo.password = undefined;
+    hospitalInfo._doc.donerCount = hospitalInfo.donerList.length;
+    hospitalInfo.donerList = undefined;
     return sendData(res, hospitalInfo);
   } else {
     userInfo._doc.token = createJWT(userInfo._id);
