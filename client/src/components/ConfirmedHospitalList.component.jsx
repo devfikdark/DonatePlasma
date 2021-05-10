@@ -8,18 +8,27 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import axios from "axios";
+import empty from "../images/nodata.svg";
+import { Box, CircularProgress, Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  layout: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default function ConfirmedHospitalList() {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
   const [confirmedHospitals, setConfirmedHospitals] = useState([]);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("/hospital/list", {
         headers: {
@@ -36,29 +45,45 @@ export default function ConfirmedHospitalList() {
         } else {
           Notification("Error", "Something went wrong. Please check your internet connection", "error");
         }
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name </TableCell>
-            <TableCell align="right">Phone</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {confirmedHospitals.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.phone}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Grid container className={classes.layout}>
+      {loading ? (
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      ) : confirmedHospitals.length !== 0 ? (
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name </TableCell>
+                <TableCell align="right">Phone</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {confirmedHospitals.map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{row.phone}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Box display="flex" justifyContent="center">
+          <>
+            <img src={empty} alt="empty" width="200" height="100%" />
+            <Typography variant="h5">No hospital information found</Typography>
+          </>
+        </Box>
+      )}
+    </Grid>
   );
 }
