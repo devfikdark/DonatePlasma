@@ -7,15 +7,19 @@ const DonerSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'User',
   },
-  dispatchDate: {
-    type: Date,
-  },
   bloodGroup: {
+    type: String,
+  },
+  area: {
     type: String,
   },
   status: {
     type: Boolean,
-    default: true,
+    default: false,
+  },
+  isComplete: {
+    type: Boolean,
+    default: false,
   },
   createAt: {
     type: Date,

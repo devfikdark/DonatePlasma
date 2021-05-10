@@ -102,15 +102,17 @@ export const signIn = catchAsync(async (req, res, next) => {
 
   if (userInfo.role === 'doner') {
     const donerInfo = await Doner.findOne({ user: userInfo._id });
-    donerInfo._doc.token = createJWT(donerInfo._id);
+    donerInfo._doc.token = createJWT(userInfo._id);
     donerInfo.password = undefined;
     return sendData(res, donerInfo);
   } else if (userInfo.role === 'hospital') {
     const hospitalInfo = await Hospital.findOne({ user: userInfo._id });
-    hospitalInfo._doc.token = createJWT(hospitalInfo._id);
+    hospitalInfo._doc.token = createJWT(userInfo._id);
     hospitalInfo.password = undefined;
     return sendData(res, hospitalInfo);
   } else {
+    userInfo._doc.token = createJWT(userInfo._id);
+    userInfo.password = undefined;
     return sendData(res, userInfo);
   }
 });
