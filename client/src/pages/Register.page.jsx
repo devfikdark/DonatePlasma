@@ -97,30 +97,84 @@ export default function RegisterPage() {
     setFile({ filePath: selectedFile, fileName: selectedFile.name });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     if (handleValidation()) {
-      const information = {
-        fullName: name,
-        password: password,
-        role: "user",
-      };
-      console.log(information);
-      axios
-        .post("/auth/signup", information)
-        .then((res) => {
-          if (res.data.status === "ok") {
-            Notification("Congratulations", "Your account is created successfully", "success");
+      let information = {};
+      // registration type is individual
+      if (registrationType === "individual") {
+        information = {
+          user: {
+            userName: userName,
+            name: name,
+            phone: phoneNumber,
+            password: password,
+            role: "donor",
+          },
+        };
+        console.log(information);
+
+        // registration for individual donor
+        axios
+          .post("/auth/signup-user", information)
+          .then((res) => {
+            Notification("Success", "Account created successfully", "success");
             history.push("/login");
-          } else {
-            Notification("Error", `${res.data.message}`, "error");
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-          setSignUpForm({ name: "", email: "", password: "", confirmPassword: "" });
-        });
+          })
+          .catch((err) => {
+            if (err.response.data.message) {
+              Notification("Error", `${err.response.data.message}`, "error");
+            } else {
+              Notification("Error", "Something went wrong. Please check your internet connection", "error");
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+            setSignUpForm({ registrationType: "individual", name: "", phoneNumber: "", userName: "", password: "", confirmPassword: "" });
+          });
+      } else {
+        // uploading image to cloudinary
+        const formData = new FormData();
+        formData.append("file", filePath);
+        formData.append("upload_preset", "ml_default");
+        const options = {
+          method: "POST",
+          body: formData,
+        };
+
+        const cloudInfo = await fetch("https://api.Cloudinary.com/v1_1/dck5ccwjv/raw/upload", options);
+        const cloudResponse = await cloudInfo.json();
+
+        information = {
+          userName: userName,
+          name: hospitalName,
+          phone: phoneNumber,
+          password: password,
+          documents: cloudResponse.url,
+          role: "hospital",
+        };
+        console.log(information);
+
+        // registration for hospital
+        axios
+          .post("/auth/signup-hospital", information)
+          .then((res) => {
+            Notification("Success", "Account created successfully", "success");
+            history.push("/login");
+          })
+          .catch((err) => {
+            if (err.response.data.message) {
+              Notification("Error", `${err.response.data.message}`, "error");
+            } else {
+              Notification("Error", "Something went wrong. Please check your internet connection", "error");
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+            setSignUpForm({ registrationType: "hospital", hospitalName: "", phoneNumber: "", userName: "", password: "", confirmPassword: "" });
+          });
+      }
     } else {
       setLoading(false);
     }
@@ -154,7 +208,7 @@ export default function RegisterPage() {
             )}
             {registrationType === "hospital" && (
               <Grid item xs={12}>
-                <TextField name="name" value={hospitalName} onChange={handleChange} variant="outlined" required fullWidth label="Hospital Name" />
+                <TextField name="hospitalName" value={hospitalName} onChange={handleChange} variant="outlined" required fullWidth label="Hospital Name" />
               </Grid>
             )}
             <Grid item xs={12}>
