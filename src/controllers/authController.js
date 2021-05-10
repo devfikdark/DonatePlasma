@@ -136,6 +136,8 @@ export const signIn = catchAsync(async (req, res, next) => {
     const hospitalInfo = await Hospital.findOne({ user: userInfo._id });
     hospitalInfo._doc.token = createJWT(userInfo._id);
     hospitalInfo.password = undefined;
+    hospitalInfo._doc.donerCount = hospitalInfo.donerList.length;
+    hospitalInfo.donerList = undefined;
     return sendData(res, hospitalInfo);
   } else {
     userInfo._doc.token = createJWT(userInfo._id);
