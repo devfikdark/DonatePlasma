@@ -110,7 +110,10 @@ export default function RegisterPage() {
             name: name,
             phone: phoneNumber,
             password: password,
-            role: "donor",
+            role: "doner",
+          },
+          doner: {
+            status: false,
           },
         };
         console.log(information);

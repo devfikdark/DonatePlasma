@@ -75,22 +75,29 @@ export default function Login() {
       axios
         .post("/auth/signin", { userName: userName, password: password })
         .then((res) => {
-          if (res.data.status === "ok") {
-            localStorage.setItem("name", res.data.data.fullName);
-            localStorage.setItem("email", res.data.data.email);
-            localStorage.setItem("role", res.data.data.role);
-            localStorage.setItem("token", res.data.data.token);
-            if (res.data.data.role === "user") {
-              history.push("/mails");
-            } else {
-              history.push("/user-list");
-            }
-            window.location.reload();
+          console.log(res);
+          // localStorage.setItem("name", res.data.data.fullName);
+          // localStorage.setItem("email", res.data.data.email);
+          // localStorage.setItem("role", res.data.data.role);
+          // localStorage.setItem("token", res.data.data.token);
+          // if (res.data.data.role === "user") {
+          //   history.push("/mails");
+          // } else {
+          //   history.push("/user-list");
+          // }
+          // window.location.reload();
+        })
+        .catch((err) => {
+          if (err.response.data.message) {
+            Notification("Error", `${err.response.data.message}`, "error");
           } else {
-            Notification("Error", `${res.data.message}`, "error");
+            Notification("Error", "Something went wrong. Please check your internet connection.", "error");
           }
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          setSignInInfo({ userName: "", password: "" });
+        });
     } else {
       setLoading(false);
     }
