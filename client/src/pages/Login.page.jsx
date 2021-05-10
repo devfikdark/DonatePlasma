@@ -81,7 +81,7 @@ export default function Login() {
             localStorage.setItem("token", res.data.data.token);
             localStorage.setItem("role", res.data.data.role);
           } else if (res.data.data.user) {
-            console.log("line 85");
+            localStorage.setItem("id", res.data.data.user._id);
             localStorage.setItem("userName", res.data.data.user.userName);
             localStorage.setItem("role", res.data.data.user.role);
             localStorage.setItem("isComplete", res.data.data.isComplete);
@@ -103,11 +103,11 @@ export default function Login() {
           window.location.reload();
         })
         .catch((err) => {
-          // if (err.response.data.message) {
-          //   Notification("Error", `${err.response.data.message}`, "error");
-          // } else {
-          //   Notification("Error", "Something went wrong. Please check your internet connection.", "error");
-          // }
+          if (err.response.data.message) {
+            Notification("Error", `${err.response.data.message}`, "error");
+          } else {
+            Notification("Error", "Something went wrong. Please check your internet connection.", "error");
+          }
           console.log(err);
         })
         .finally(() => {

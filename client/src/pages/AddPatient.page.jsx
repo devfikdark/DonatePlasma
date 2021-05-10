@@ -5,6 +5,7 @@ import { grey, indigo } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { listOfBloodGroup, areaLocation } from "../utils/constants";
 import Notification from "../components/Notification.component";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -42,8 +43,8 @@ function AddPatient() {
   const [showForm, setShowForm] = useState(false);
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [bloodGroup, setBloodGroup] = useState();
-  const [area, setArea] = useState();
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [area, setArea] = useState("");
   const [patientInformation, setPatientInformation] = useState({
     fullName: "",
     phoneNumber: "",
@@ -60,9 +61,60 @@ function AddPatient() {
   const handleAreaLocation = (e) => setArea(e.target.value);
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
   const toggleAddPatientForm = () => setShowForm(!showForm);
+  const handleValidation = () => {
+    const validateNumber = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/.test(phoneNumber);
+    if (!validateNumber) {
+      return Notification("Warning", "Invalid phone number", "warning");
+    } else {
+      return true;
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    if (handleValidation()) {
+      const information = {
+        hospital: localStorage.getItem("id"),
+        user: {
+          userName: userName,
+          name: fullName,
+          password: password,
+          phone: phoneNumber,
+          address: address,
+          role: "doner",
+        },
+        doner: {
+          age: age,
+          bloodGroup: bloodGroup,
+          area: area,
+          status: availability,
+          isComplete: true,
+        },
+      };
+
+      axios
+        .post("/auth/signup-user", information)
+        .then((res) => {
+          console.log(res);
+          Notification("Success", "Donor account created successfully", "success");
+        })
+        .catch((err) => {
+          if (err.response.data.message) {
+            Notification("Error", `${err.response.data.message}`, "error");
+          } else {
+            Notification("Error", "Something went wrong. Please check your internet connection", "error");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+          setPatientInformation({ fullName: "", phoneNumber: "", age: "", address: "", userName: "", password: "" });
+        });
+      console.log(information);
+    } else {
+      setLoading(false);
+    }
+    setLoading(false);
   };
 
   return (
@@ -98,7 +150,9 @@ function AddPatient() {
                       <em>None</em>
                     </MenuItem>
                     {listOfBloodGroup.map((el) => (
-                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                      <MenuItem key={el.id} value={el.id}>
+                        {el.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -111,7 +165,9 @@ function AddPatient() {
                       <em>None</em>
                     </MenuItem>
                     {areaLocation.map((el) => (
-                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                      <MenuItem key={el.id} value={el.id}>
+                        {el.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
