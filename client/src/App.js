@@ -34,14 +34,30 @@ function App() {
       <div className="App">
         <Header />
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/pending-hospitals" component={AdminPanelPage} />
-          <Route exact path="/donor-profile" component={DonorProfile} />
-          <Route exact path="/hospital-profile" component={HospitalProfile} />
-          <Route exact path="/add-patient" component={AddPatient} />
-          <Route exact path="/notifications" component={NotificationListPage} />
+          {localStorage.getItem("token") && localStorage.getItem("role") === "doner" ? (
+            <>
+              <Route exact path="/" component={DonorProfile} />
+              <Route exact path="/donor-profile" component={DonorProfile} />
+              <Route exact path="/notifications" component={NotificationListPage} />
+            </>
+          ) : localStorage.getItem("token") && localStorage.getItem("role") === "hospital" ? (
+            <>
+              <Route exact path="/" component={HospitalProfile} />
+              <Route exact path="/hospital-profile" component={HospitalProfile} />
+              <Route exact path="/add-patient" component={AddPatient} />
+            </>
+          ) : localStorage.getItem("token") && localStorage.getItem("role") === "admin" ? (
+            <>
+              <Route exact path="/" component={AdminPanelPage} />
+              <Route exact path="/pending-hospitals" component={AdminPanelPage} />
+            </>
+          ) : (
+            <>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/register" component={RegisterPage} />
+              <Route exact path="/login" component={LoginPage} />
+            </>
+          )}
         </Switch>
       </div>
       <NotificationContainer />

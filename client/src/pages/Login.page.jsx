@@ -76,16 +76,27 @@ export default function Login() {
         .post("/auth/signin", { userName: userName, password: password })
         .then((res) => {
           console.log(res);
-          // localStorage.setItem("name", res.data.data.fullName);
-          // localStorage.setItem("email", res.data.data.email);
-          // localStorage.setItem("role", res.data.data.role);
-          // localStorage.setItem("token", res.data.data.token);
-          // if (res.data.data.role === "user") {
-          //   history.push("/mails");
-          // } else {
-          //   history.push("/user-list");
-          // }
-          // window.location.reload();
+          if (res.data.data.role) {
+            localStorage.setItem("userName", res.data.data.userName);
+            localStorage.setItem("token", res.data.data.token);
+            localStorage.setItem("role", res.data.data.role);
+            history.push("/pending-hospitals");
+          } else if (res.data.data.user) {
+            console.log("line 85");
+            localStorage.setItem("userName", res.data.data.user.userName);
+            localStorage.setItem("role", res.data.data.user.role);
+            localStorage.setItem("isComplete", res.data.data.isComplete);
+            localStorage.setItem("status", res.data.data.status);
+            localStorage.setItem("token", res.data.data.token);
+          }
+
+          if (res.data.data.user.role === "doner") {
+            history.push("/donor-profile");
+          } else {
+            history.push("/hospital-profile");
+          }
+
+          window.location.reload();
         })
         .catch((err) => {
           if (err.response.data.message) {
