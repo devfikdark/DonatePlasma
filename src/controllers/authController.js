@@ -85,8 +85,9 @@ export const signUpHospital = catchAsync(async (req, res, next) => {
 export const signUp = catchAsync(async (req, res, next) => {
   res.setHeader("Content-type", "application/json");
 
+  const { userName, password } = req.body;
   let userInfo = await User.findOne({
-    userName: req.body.userName,
+    userName,
   });
   if (userInfo) return next(new AppError("Already use this userName.", 400));
 
@@ -95,7 +96,7 @@ export const signUp = catchAsync(async (req, res, next) => {
     createAt: Date.now(),
   });
   if (!userInfo) return next(new AppError("Somthing went wrong to create user."));
-  userInfo.password = await userInfo.hashPassword(user.password);
+  userInfo.password = await userInfo.hashPassword(password);
   await userInfo.save();
 
   return sendMessage(res, 'Admin created successfully');
