@@ -82,6 +82,25 @@ export const signUpHospital = catchAsync(async (req, res, next) => {
   return sendMessage(res, 'Hospital created successfully');
 });
 
+export const signUp = catchAsync(async (req, res, next) => {
+  res.setHeader("Content-type", "application/json");
+
+  let userInfo = await User.findOne({
+    userName: req.body.userName,
+  });
+  if (userInfo) return next(new AppError("Already use this userName.", 400));
+
+  userInfo = await User.create({
+    ...req.body,
+    createAt: Date.now(),
+  });
+  if (!userInfo) return next(new AppError("Somthing went wrong to create user."));
+  userInfo.password = await userInfo.hashPassword(user.password);
+  await userInfo.save();
+
+  return sendMessage(res, 'Admin created successfully');
+});
+
 // SignIn
 export const signIn = catchAsync(async (req, res, next) => {
   res.setHeader("Content-type", "application/json");
