@@ -14,6 +14,12 @@ const HospitalSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  donerList: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Doner',
+    }
+  ],
   createAt: {
     type: Date,
   },
