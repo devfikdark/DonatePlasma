@@ -27,3 +27,15 @@ export const getHospital = catchAsync(async (req, res, next) => {
     hospitalInfo.donerList = undefined;
     return sendData(res, hospitalInfo);
 });
+
+export const activeHospital = catchAsync(async (req, res, next) => {
+    res.setHeader("Content-type", "application/json");
+  
+    const { status } = req.body;
+
+    const hospitalInfo = await Hospital.findById(req.params.hid);
+    hospitalInfo.status = status;
+    await hospitalInfo.save();
+
+    return sendMessage(res, 'Account active successfully');
+});
