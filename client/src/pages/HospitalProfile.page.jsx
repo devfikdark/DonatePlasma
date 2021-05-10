@@ -18,16 +18,35 @@ const useStyles = makeStyles((theme) => ({
 function HospitalProfile() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const [hospitalProfile, setHospitalProfile] = useState({
+    hospitalUserName: "",
+    hospitalName: "",
+    phoneNumber: "",
+    websiteName: "",
+    address: "",
+  });
+  const { hospitalUserName, hospitalName, phoneNumber, websiteName, address } = hospitalProfile;
+
+  const handleChange = (e) => setHospitalProfile({ ...hospitalProfile, [e.target.name]: e.target.value });
+
+  const handleValidation = () => {
+    const validateNumber = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/.test(phoneNumber);
+    if (!validateNumber) return Notification("Warning", "Phone number is not valid", "warning");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div>
       <Container maxWidth="lg">
-        <form>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Alert severity="warning" className={classes.margin}>
-                <AlertTitle>Warning</AlertTitle>
-                <Typography variant="body1">Your profile is not ready yet. Please update your profile to get add patient as donor.</Typography>
+              <Alert severity="error" className={classes.margin}>
+                <AlertTitle>Pending Request</AlertTitle>
+                <Typography variant="body1"> Your request is being processed. Please wait until admin confirms your account. </Typography>
               </Alert>
             </Grid>
             <Grid item xs={12}>
@@ -37,21 +56,21 @@ function HospitalProfile() {
             </Grid>
 
             <Grid item xs={6}>
-              <TextField label="Hospital Username" required variant="outlined" fullWidth />
+              <TextField label="Hospital Username" required variant="outlined" name="hospitalUserName" value={hospitalUserName} onChange={handleChange} fullWidth />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Hospital Name" required variant="outlined" fullWidth />
+              <TextField label="Hospital Name" required variant="outlined" name="hospitalName" value={hospitalName} onChange={handleChange} fullWidth />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Phone Number" required variant="outlined" fullWidth />
+              <TextField label="Phone Number" required variant="outlined" name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Website Name" required variant="outlined" fullWidth />
+              <TextField label="Website Name" variant="outlined" name="websiteName" value={websiteName} onChange={handleChange} fullWidth />
             </Grid>
             <Grid item xs={12}>
-              <TextField rows={4} multiline label="Address" required variant="outlined" fullWidth />
+              <TextField rows={4} multiline label="Address" required variant="outlined" name="address" value={address} onChange={handleChange} fullWidth />
             </Grid>
-            <Button variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
+            <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
               {loading ? "Updating profile..." : "Submit"}
             </Button>
           </Grid>

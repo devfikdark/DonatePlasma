@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
   buttonStyle: {
     marginRight: 8,
     color: "#fff",
-    backgroundColor: green[600],
   },
 }));
 
@@ -38,7 +37,7 @@ const PendingHospitalList = () => {
                       <Typography variant="subtitle1">0185544652</Typography>
                       <Divider />
                       <Box mt={3}>
-                        <Button variant="contained" color="primary" className={classes.buttonStyle} size="small">
+                        <Button variant="contained" color="primary" disableElevation className={classes.buttonStyle} size="small">
                           Confirm
                         </Button>
                         <Button variant="outlined" color="secondary" size="small">

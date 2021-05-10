@@ -3,7 +3,7 @@ import { Button, Checkbox, Container, FormControl, FormControlLabel, Grid, Input
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { grey, indigo } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
-import { listOfBloodGroup } from "../utils/constants";
+import { listOfBloodGroup, areaLocation } from "../utils/constants";
 import Notification from "../components/Notification.component";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,15 +42,29 @@ function AddPatient() {
   const [showForm, setShowForm] = useState(false);
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [bloodGroup, setBloodGroup] = useState(listOfBloodGroup);
+  const [bloodGroup, setBloodGroup] = useState();
+  const [area, setArea] = useState();
+  const [patientInformation, setPatientInformation] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    age: "",
+    address: "",
+    userName: "",
+    password: "",
+  });
 
-  const handleBloodGroup = (e) => {
-    setBloodGroup(e.target.value);
-  };
+  const { firstName, lastName, phoneNumber, age, address, userName, password } = patientInformation;
 
+  const handleChange = (e) => setPatientInformation({ ...patientInformation, [e.target.name]: e.target.value });
+  const handleBloodGroup = (e) => setBloodGroup(e.target.value);
+  const handleAreaLocation = (e) => setArea(e.target.value);
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
-
   const toggleAddPatientForm = () => setShowForm(!showForm);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div>
@@ -66,16 +80,19 @@ function AddPatient() {
         </Grid>
 
         {showForm && (
-          <form>
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={2} className={classes.margin}>
               <Grid item xs={6}>
-                <TextField label="Full Name" required variant="outlined" name="fullName" fullWidth />
+                <TextField label="First Name" required variant="outlined" name="firstName" value={firstName} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <TextField label="Phone Number" type="number" required variant="outlined" name="phoneNumber" fullWidth />
+                <TextField label="Last Name" required variant="outlined" name="lastName" value={lastName} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <TextField label="Age" type="number" required variant="outlined" name="age" fullWidth />
+                <TextField label="Phone Number" type="number" required variant="outlined" name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField label="Age" type="number" required variant="outlined" name="age" value={age} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
                 <FormControl variant="outlined" fullWidth>
@@ -84,11 +101,33 @@ function AddPatient() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {listOfBloodGroup.map((el) => (
+                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={6}>
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel required>Select Area</InputLabel>
+                  <Select variant="outlined" value={area} onChange={handleAreaLocation} label="Blood Group">
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {areaLocation.map((el) => (
+                      <MenuItem value={el.id}> {el.name} </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField label="Address" required variant="outlined" name="address" rows={4} value={address} onChange={handleChange} multiline fullWidth />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField label="Username" required variant="outlined" name="userName" value={userName} onChange={handleChange} fullWidth />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField label="Password" type="password" required variant="outlined" name="password" value={password} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
                 <FormControlLabel
@@ -97,16 +136,7 @@ function AddPatient() {
                   className={classes.available}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField label="Address" required variant="outlined" name="address" rows={4} multiline fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField label="Username" required variant="outlined" name="userName" fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField label="Password" type="password" required variant="outlined" name="password" fullWidth />
-              </Grid>
-              <Button variant="contained" color="primary" fullWidth className={classes.submit}>
+              <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit}>
                 {loading ? "Updating profile..." : "Submit"}
               </Button>
             </Grid>
