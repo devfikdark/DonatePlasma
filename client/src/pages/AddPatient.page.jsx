@@ -45,8 +45,7 @@ function AddPatient() {
   const [bloodGroup, setBloodGroup] = useState();
   const [area, setArea] = useState();
   const [patientInformation, setPatientInformation] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     phoneNumber: "",
     age: "",
     address: "",
@@ -54,7 +53,7 @@ function AddPatient() {
     password: "",
   });
 
-  const { firstName, lastName, phoneNumber, age, address, userName, password } = patientInformation;
+  const { fullName, phoneNumber, age, address, userName, password } = patientInformation;
 
   const handleChange = (e) => setPatientInformation({ ...patientInformation, [e.target.name]: e.target.value });
   const handleBloodGroup = (e) => setBloodGroup(e.target.value);
@@ -82,11 +81,8 @@ function AddPatient() {
         {showForm && (
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2} className={classes.margin}>
-              <Grid item xs={6}>
-                <TextField label="First Name" required variant="outlined" name="firstName" value={firstName} onChange={handleChange} fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField label="Last Name" required variant="outlined" name="lastName" value={lastName} onChange={handleChange} fullWidth />
+              <Grid item xs={12}>
+                <TextField label="Full Name" required variant="outlined" name="fullName" value={fullName} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
                 <TextField label="Phone Number" type="number" required variant="outlined" name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth />
