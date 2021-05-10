@@ -56,11 +56,15 @@ const PendingHospitalList = () => {
     console.log(id);
     setConfirmLoading(true);
     axios
-      .post(`/hospital/profile/${id}/modify`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
+      .patch(
+        `/hospital/profile/${id}/active`,
+        { status: true },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         Notification("Success", "You've confirmed the hospital", "success");

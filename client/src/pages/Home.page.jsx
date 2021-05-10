@@ -54,8 +54,8 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [area, setArea] = useState();
-  const [bloodGroup, setBloodGroup] = useState();
+  const [area, setArea] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
   const [shoutInformation, setShoutInformation] = useState({
     name: "",
     phoneNumber: "",

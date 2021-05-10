@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { listOfBloodGroup, areaLocation } from "../utils/constants";
 import Notification from "../components/Notification.component";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -21,16 +22,17 @@ function DonorProfile() {
   const classes = useStyles();
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [bloodGroup, setBloodGroup] = useState();
-  const [area, setArea] = useState();
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [area, setArea] = useState("");
   const [donorProfileInformation, setDonorProfileInformation] = useState({
     userName: "",
     fullName: "",
     phoneNumber: "",
     age: "",
     address: "",
+    isComplete: false,
   });
-  const { userName, fullName, phoneNumber, age, address } = donorProfileInformation;
+  const { userName, fullName, phoneNumber, age, address, isComplete } = donorProfileInformation;
 
   const handleChange = (e) => setDonorProfileInformation({ ...donorProfileInformation, [e.target.name]: e.target.value });
   const handleAvailabilityChange = (e) => setAvailability(e.target.checked);
@@ -41,6 +43,40 @@ function DonorProfile() {
     setArea(e.target.value);
   };
 
+  const getDonorInformation = () => {
+    axios
+      .get(`/doner/${localStorage.getItem("id")}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        const info = res.data.data;
+        setDonorProfileInformation({
+          userName: info.user.userName,
+          fullName: info.user.name,
+          phoneNumber: info.user.phone,
+          age: info.user.age || "",
+          address: info.user.address,
+          isComplete: info.isComplete,
+        });
+        setAvailability(info.status);
+        // setArea()
+        // setBloodGroup()
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data.message) {
+          Notification("Error", `${err.response.data.message}`, "error");
+        } else {
+          Notification("Error", "Something went wrong. Please check you internet connection", "error");
+        }
+      });
+  };
+
+  useEffect(() => getDonorInformation(), []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -50,12 +86,14 @@ function DonorProfile() {
       <Container maxWidth="lg">
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Alert severity="error" className={classes.margin}>
-                <AlertTitle>Warning</AlertTitle>
-                <Typography variant="body1">Your profile is not ready yet. Please update your profile to get yourself on the donor list.</Typography>
-              </Alert>
-            </Grid>
+            {!isComplete && (
+              <Grid item xs={12}>
+                <Alert severity="error" className={classes.margin}>
+                  <AlertTitle>Warning</AlertTitle>
+                  <Typography variant="body1">Your profile is not ready yet. Please update your profile to get yourself on the donor list.</Typography>
+                </Alert>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
                 <Typography variant="h4">Profile Information</Typography>

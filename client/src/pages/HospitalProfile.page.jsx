@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 function HospitalProfile() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const [information, setInformation] = useState([]);
   const [hospitalProfile, setHospitalProfile] = useState({
     hospitalUserName: "",
     hospitalName: "",
