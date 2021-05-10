@@ -80,7 +80,6 @@ export default function Login() {
             localStorage.setItem("userName", res.data.data.userName);
             localStorage.setItem("token", res.data.data.token);
             localStorage.setItem("role", res.data.data.role);
-            history.push("/pending-hospitals");
           } else if (res.data.data.user) {
             console.log("line 85");
             localStorage.setItem("userName", res.data.data.user.userName);
@@ -90,20 +89,26 @@ export default function Login() {
             localStorage.setItem("token", res.data.data.token);
           }
 
+          if (res.data.data.role === "admin") {
+            history.push("/pending-hospitals");
+            window.location.reload();
+          }
+
           if (res.data.data.user.role === "doner") {
             history.push("/donor-profile");
-          } else {
+          } else if (res.data.data.user.role === "hospital") {
             history.push("/hospital-profile");
           }
 
           window.location.reload();
         })
         .catch((err) => {
-          if (err.response.data.message) {
-            Notification("Error", `${err.response.data.message}`, "error");
-          } else {
-            Notification("Error", "Something went wrong. Please check your internet connection.", "error");
-          }
+          // if (err.response.data.message) {
+          //   Notification("Error", `${err.response.data.message}`, "error");
+          // } else {
+          //   Notification("Error", "Something went wrong. Please check your internet connection.", "error");
+          // }
+          console.log(err);
         })
         .finally(() => {
           setLoading(false);
