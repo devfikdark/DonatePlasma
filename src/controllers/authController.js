@@ -45,7 +45,9 @@ export const signUpUser = catchAsync(async (req, res, next) => {
   if (hospital) {
     const hospitalInfo = await Hospital.findById(hospital);
     hospitalInfo.donerList.push(donerInfo.id);
+    donerInfo.hospital = hospital;
     await hospitalInfo.save();
+    await donerInfo.save();
   }
 
   return sendMessage(res, 'Doner created successfully');

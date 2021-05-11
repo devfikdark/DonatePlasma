@@ -13,6 +13,7 @@ mongoose.connect(cloudDB, {
   useFindAndModify: false,
 }).then(() => {
   console.log('DB connect success :)');
-}).catch(() => {
+}).catch((err) => {
+  console.log(err); 
   console.log('Something problem to connect DB !!!');
 });
