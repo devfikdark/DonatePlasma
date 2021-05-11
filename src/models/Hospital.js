@@ -14,6 +14,10 @@ const HospitalSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isCancel: {
+    type: Boolean,
+    default: false,
+  },
   donerList: [
     {
       type: mongoose.Schema.ObjectId,

@@ -11,8 +11,8 @@ import sendMessage from "../utils/responses/sendMessage";
 export const hospitalList = catchAsync(async (req, res, next) => {
   res.setHeader("Content-type", "application/json");
 
-  const pendingList = await Hospital.find({ status: false });
-  const confirmedList = await Hospital.find({ status: true });
+  const pendingList = await Hospital.find({ status: false, isCancel: false });
+  const confirmedList = await Hospital.find({ status: true, isCancel: false });
 
   return sendData(res, {
     pendingList: HospitalInfo(pendingList),
@@ -50,6 +50,20 @@ export const activeHospital = catchAsync(async (req, res, next) => {
     await hospitalInfo.save();
 
     return sendMessage(res, 'Account active successfully');
+});
+
+export const cancelHospital = catchAsync(async (req, res, next) => {
+  res.setHeader("Content-type", "application/json");
+
+  const { isCancel } = req.body;
+
+  const hospitalInfo = await Hospital.findById(req.params.hid);
+  if (!hospitalInfo) return next(new AppError("Hospital not found", 404));
+
+  hospitalInfo.isCancel = isCancel;
+  await hospitalInfo.save();
+
+  return sendMessage(res, 'Account cancel successfully');
 });
 
 export const modifyHospital = catchAsync(async (req, res, next) => {
