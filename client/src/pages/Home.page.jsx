@@ -140,7 +140,7 @@ function Home() {
       });
   };
 
-  const searcher = new FuzzySearch(filteredDataset, ["name", "phone", "area", "bloodGroup"], { sort: true });
+  const searcher = new FuzzySearch(filteredDataset, ["name", "area", "bloodGroup"], { sort: true });
 
   const handleSearch = (e) => {
     e.preventDefault();
