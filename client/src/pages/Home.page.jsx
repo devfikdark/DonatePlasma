@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [area, setArea] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
   const [search, setSearch] = useState("");
@@ -79,9 +80,13 @@ function Home() {
   const handleBloodGroup = (e) => setBloodGroup(e.target.value);
   const handleAreaLocation = (e) => setArea(e.target.value);
   const handleChange = (e) => setShoutInformation({ ...shoutInformation, [e.target.name]: e.target.value });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleValidation = () => {
+    const validateNumber = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/.test(phoneNumber);
+    if (!validateNumber) {
+      return Notification("Warning", "Invalid phone number", "warning");
+    } else {
+      return true;
+    }
   };
 
   const getDonorList = () => {
@@ -138,6 +143,41 @@ function Home() {
           Notification("Error", "Something went wrong. Please check your internet connection", "error");
         }
       });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const information = {
+      name: name,
+      phone: phoneNumber,
+      area: area,
+      bloodGroup: bloodGroup,
+    };
+
+    if (handleValidation()) {
+      axios
+        .post("/notification", information)
+        .then((res) => {
+          Notification("Success", "Your notification has been sent successfully", "success");
+        })
+        .catch((err) => {
+          if (err.response.data.message) {
+            Notification("Error", `${err.response.data.message}`, "error");
+          } else {
+            Notification("Error", "Something went wrong. Please check your internet connection", "error");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+          setArea("");
+          setBloodGroup("");
+          setShoutInformation({ name: "", phoneNumber: "" });
+          handleClose();
+        });
+    } else {
+      setLoading(false);
+    }
   };
 
   const searcher = new FuzzySearch(filteredDataset, ["name", "area", "bloodGroup"], { sort: true });
@@ -259,8 +299,8 @@ function Home() {
                 This feature lets you to give a notification to selected donors based on their location and blood group. In this way, donors can be notified through the system.
               </DialogContentText>
               <TextField autoFocus margin="dense" label="Name" name="name" value={name} onChange={handleChange} required fullWidth variant="outlined" />
-              <TextField margin="dense" label="Phone Number" name="phoneNumber" value={phoneNumber} onChange={handleChange} required fullWidth variant="outlined" />
-              <FormControl fullWidth variant="outlined" margin="dense">
+              <TextField margin="dense" type="number" label="Phone Number" name="phoneNumber" value={phoneNumber} onChange={handleChange} required fullWidth variant="outlined" />
+              <FormControl required fullWidth variant="outlined" margin="dense">
                 <InputLabel>Select Area</InputLabel>
                 <Select value={area} onChange={handleAreaLocation} label="Blood Group">
                   <MenuItem value="">
@@ -273,7 +313,7 @@ function Home() {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl fullWidth variant="outlined" margin="dense">
+              <FormControl required fullWidth variant="outlined" margin="dense">
                 <InputLabel>Blood Group</InputLabel>
                 <Select value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
                   <MenuItem value="">
@@ -293,8 +333,8 @@ function Home() {
               <Button onClick={handleClose} color="secondary">
                 Cancel
               </Button>
-              <Button type="submit" color="primary" className={classes.confirmShoutButton}>
-                Make Shout
+              <Button type="submit" color="primary" className={classes.confirmShoutButton} disabled={loading}>
+                {loading ? "Notifying" : "Notify others"}
               </Button>
             </DialogActions>
           </form>
