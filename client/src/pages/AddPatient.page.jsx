@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Button, Checkbox, Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, TextField, Tooltip } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Checkbox, CircularProgress, Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Paper, Select, TextField, Tooltip, Typography } from "@material-ui/core";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { grey, indigo } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import { listOfBloodGroup, areaLocation } from "../utils/constants";
 import Notification from "../components/Notification.component";
+import HospitalDonorList from "../components/HospitalDonorList.component";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,8 +44,10 @@ function AddPatient() {
   const [showForm, setShowForm] = useState(false);
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
   const [bloodGroup, setBloodGroup] = useState("");
   const [area, setArea] = useState("");
+  const [donorList, setDonorList] = useState([]);
   const [patientInformation, setPatientInformation] = useState({
     fullName: "",
     phoneNumber: "",
@@ -109,6 +112,8 @@ function AddPatient() {
         .finally(() => {
           setLoading(false);
           setPatientInformation({ fullName: "", phoneNumber: "", age: "", address: "", userName: "", password: "" });
+          setBloodGroup("");
+          setArea("");
         });
       console.log(information);
     } else {
@@ -116,6 +121,30 @@ function AddPatient() {
     }
     setLoading(false);
   };
+
+  const getHospitalDonors = () => {
+    setLoadingData(true);
+    axios
+      .get(`/hospital/profile/${localStorage.getItem("id")}/doner`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setDonorList(res.data.data);
+      })
+      .catch((err) => {
+        if (err.response.data.message) {
+          Notification("Error", `${err.response.data.message}`, "error");
+        } else {
+          Notification("Error", "Something went wrong. Please check your internet connection", "error");
+        }
+      })
+      .finally(() => setLoadingData(false));
+  };
+
+  useEffect(() => getHospitalDonors(), []);
 
   return (
     <div>
@@ -188,12 +217,29 @@ function AddPatient() {
                   className={classes.available}
                 />
               </Grid>
-              <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit}>
+              <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
                 {loading ? "Updating profile..." : "Submit"}
               </Button>
             </Grid>
           </form>
         )}
+
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="center">
+              <Typography variant="h4">Donor List</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            {donorList.length !== 0 ? (
+              <HospitalDonorList donorList={donorList} />
+            ) : (
+              <Box display="flex" justifyContent="center">
+                <Typography variant="h5">Data Not Found</Typography>
+              </Box>
+            )}
+          </Grid>
+        </Grid>
       </Container>
     </div>
   );
