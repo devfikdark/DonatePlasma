@@ -161,7 +161,7 @@ function DonorProfile() {
               <TextField label="Age" type="number" required name="age" value={age} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
-              <FormControl variant="outlined" fullWidth>
+              <FormControl variant="outlined" fullWidth required>
                 <InputLabel>Blood Group</InputLabel>
                 <Select variant="outlined" value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
                   <MenuItem value="">
@@ -174,8 +174,8 @@ function DonorProfile() {
               </FormControl>
             </Grid>
             <Grid item xs={6}>
-              <FormControl variant="outlined" fullWidth>
-                <InputLabel required>Select Area</InputLabel>
+              <FormControl variant="outlined" fullWidth required>
+                <InputLabel>Select Area</InputLabel>
                 <Select variant="outlined" value={area} onChange={handleAreaLocation} label="Select Area">
                   <MenuItem value="">
                     <em>None</em>
@@ -192,6 +192,7 @@ function DonorProfile() {
             </Grid>
             <Grid item xs={6}>
               <FormControlLabel
+                required
                 control={<Checkbox checked={availability} onChange={handleAvailabilityChange} name="availability" color="primary" />}
                 label="I am available to donate blood"
                 className={classes.available}

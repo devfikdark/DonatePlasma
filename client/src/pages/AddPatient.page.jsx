@@ -44,7 +44,6 @@ function AddPatient() {
   const [showForm, setShowForm] = useState(false);
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [loadingData, setLoadingData] = useState(false);
   const [bloodGroup, setBloodGroup] = useState("");
   const [area, setArea] = useState("");
   const [donorList, setDonorList] = useState([]);
@@ -101,6 +100,7 @@ function AddPatient() {
         .then((res) => {
           console.log(res);
           Notification("Success", "Donor account created successfully", "success");
+          getHospitalDonors();
         })
         .catch((err) => {
           if (err.response.data.message) {
@@ -115,15 +115,12 @@ function AddPatient() {
           setBloodGroup("");
           setArea("");
         });
-      console.log(information);
     } else {
       setLoading(false);
     }
-    setLoading(false);
   };
 
   const getHospitalDonors = () => {
-    setLoadingData(true);
     axios
       .get(`/hospital/profile/${localStorage.getItem("id")}/doner`, {
         headers: {
@@ -140,8 +137,7 @@ function AddPatient() {
         } else {
           Notification("Error", "Something went wrong. Please check your internet connection", "error");
         }
-      })
-      .finally(() => setLoadingData(false));
+      });
   };
 
   useEffect(() => getHospitalDonors(), []);
@@ -172,8 +168,8 @@ function AddPatient() {
                 <TextField label="Age" type="number" required variant="outlined" name="age" value={age} onChange={handleChange} fullWidth />
               </Grid>
               <Grid item xs={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel required>Blood Group</InputLabel>
+                <FormControl variant="outlined" fullWidth required>
+                  <InputLabel>Blood Group</InputLabel>
                   <Select variant="outlined" value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
                     <MenuItem value="">
                       <em>None</em>
@@ -187,8 +183,8 @@ function AddPatient() {
                 </FormControl>
               </Grid>
               <Grid item xs={6}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel required>Select Area</InputLabel>
+                <FormControl variant="outlined" fullWidth required>
+                  <InputLabel>Select Area</InputLabel>
                   <Select variant="outlined" value={area} onChange={handleAreaLocation} label="Blood Group">
                     <MenuItem value="">
                       <em>None</em>
@@ -218,7 +214,7 @@ function AddPatient() {
                 />
               </Grid>
               <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
-                {loading ? "Updating profile..." : "Submit"}
+                {loading ? "Creating profile..." : "Submit"}
               </Button>
             </Grid>
           </form>
