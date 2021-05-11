@@ -80,10 +80,14 @@ export default function ConfirmedHospitalList() {
         </TableContainer>
       ) : (
         <Box display="flex" justifyContent="center">
-          <>
-            <img src={empty} alt="empty" width="200" height="100%" />
-            <Typography variant="h5">No hospital information found</Typography>
-          </>
+          <Grid container>
+            <Grid item xs={12}>
+              <img src={empty} alt="empty" width="200" height="100%" />
+              <Box display="flex" justifyContent="center">
+                <Typography variant="h5">No pending hospitals</Typography>
+              </Box>
+            </Grid>
+          </Grid>
         </Box>
       )}
     </Grid>
