@@ -138,10 +138,21 @@ function DonorProfile() {
             </Grid>
 
             <Grid item xs={6}>
-              <TextField label="Username" required readOnly name="userName" value={userName} onChange={handleChange} fullWidth variant="outlined" />
+              <TextField
+                label="Username"
+                required
+                InputProps={{
+                  readOnly: true,
+                }}
+                name="userName"
+                value={userName}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={6}>
-              <TextField label="Full Name" required readOnly name="fullName" value={fullName} onChange={handleChange} fullWidth variant="outlined" />
+              <TextField label="Full Name" required name="fullName" value={fullName} onChange={handleChange} fullWidth variant="outlined" />
             </Grid>
             <Grid item xs={6}>
               <TextField label="Phone Number" required name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth variant="outlined" />

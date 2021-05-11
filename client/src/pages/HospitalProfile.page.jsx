@@ -128,7 +128,18 @@ function HospitalProfile() {
             </Grid>
 
             <Grid item xs={6}>
-              <TextField label="Hospital Username" required variant="outlined" name="hospitalUserName" value={hospitalUserName} onChange={handleChange} fullWidth />
+              <TextField
+                label="Hospital Username"
+                InputProps={{
+                  readOnly: true,
+                }}
+                required
+                variant="outlined"
+                name="hospitalUserName"
+                value={hospitalUserName}
+                onChange={handleChange}
+                fullWidth
+              />
             </Grid>
             <Grid item xs={6}>
               <TextField label="Hospital Name" required variant="outlined" name="hospitalName" value={hospitalName} onChange={handleChange} fullWidth />
