@@ -24,6 +24,8 @@ export const getHospital = catchAsync(async (req, res, next) => {
     res.setHeader("Content-type", "application/json");
   
     const hospitalInfo = await Hospital.findById(req.params.hid);
+    if (!hospitalInfo) return next(new AppError("Hospital not found", 404));
+
     hospitalInfo._doc.donerCount = hospitalInfo.donerList.length;
     hospitalInfo.donerList = undefined;
     return sendData(res, hospitalInfo);
@@ -42,6 +44,8 @@ export const activeHospital = catchAsync(async (req, res, next) => {
     const { status } = req.body;
 
     const hospitalInfo = await Hospital.findById(req.params.hid);
+    if (!hospitalInfo) return next(new AppError("Hospital not found", 404));
+
     hospitalInfo.status = status;
     await hospitalInfo.save();
 
