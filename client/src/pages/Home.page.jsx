@@ -25,7 +25,6 @@ import RecordVoiceOverRoundedIcon from "@material-ui/icons/RecordVoiceOverRounde
 import { areaLocation, listOfBloodGroup } from "../utils/constants";
 import Notification from "../components/Notification.component";
 import FuzzySearch from "fuzzy-search";
-import empty from "../images/nodata.svg";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
