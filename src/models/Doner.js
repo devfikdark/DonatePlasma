@@ -13,6 +13,9 @@ const DonerSchema = new mongoose.Schema({
   area: {
     type: String,
   },
+  hospital: {
+    type: String,
+  },
   status: {
     type: Boolean,
     default: false,

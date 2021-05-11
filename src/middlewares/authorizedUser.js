@@ -26,7 +26,6 @@ const authorizedUser = async (req, res, next) => {
 
   // Check if user still exists
   const currentUser = await User.findById(decoded.userId);
-  console.log(currentUser);
   if (!currentUser) {
     return next(new AppError("Your session has expired. Please login again.", 400));
   }

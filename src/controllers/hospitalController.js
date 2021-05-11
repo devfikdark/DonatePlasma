@@ -5,6 +5,7 @@ import Doner from "../models/Doner";
 import Hospital from "../models/Hospital";
 import sendData from "../utils/responses/sendData";
 import HospitalInfo from '../utils/dto/Hospital';
+import DonerInfo from '../utils/dto/DonerInfo';
 import sendMessage from "../utils/responses/sendMessage";
 
 export const hospitalList = catchAsync(async (req, res, next) => {
@@ -26,6 +27,13 @@ export const getHospital = catchAsync(async (req, res, next) => {
     hospitalInfo._doc.donerCount = hospitalInfo.donerList.length;
     hospitalInfo.donerList = undefined;
     return sendData(res, hospitalInfo);
+});
+
+export const getDoners = catchAsync(async (req, res, next) => {
+  res.setHeader("Content-type", "application/json");
+
+  const donerData = await Doner.find({ hospital: req.params.hid });
+  return sendData(res, DonerInfo(donerData));
 });
 
 export const activeHospital = catchAsync(async (req, res, next) => {
