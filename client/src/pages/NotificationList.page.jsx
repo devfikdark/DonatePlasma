@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, CircularProgress, Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { blueGrey, green } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import moment from "moment";
 import Notification from "../components/Notification.component";
 import axios from "axios";
