@@ -264,7 +264,7 @@ function Home() {
               <Grid item xs={12} md={6}>
                 <form onSubmit={handleSearch}>
                   <Box display="flex" justifyContent="flex-end" alignItems="center">
-                    <TextField label="Search" name="search" value={search} onChange={(e) => setSearch(e.target.value)} />
+                    <TextField label="Search" type="search" name="search" value={search} onChange={(e) => setSearch(e.target.value)} />
                     <Button type="submit" variant="contained" color="primary" className={classes.filterButton} size="small" disableElevation endIcon={<SearchRoundedIcon />} onClick={handleSearch}>
                       Search
                     </Button>
