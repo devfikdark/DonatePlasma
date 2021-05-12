@@ -119,7 +119,7 @@ function HospitalProfile() {
               <Grid item xs={12}>
                 <Alert severity="error" className={classes.margin}>
                   <AlertTitle>Account Rejected</AlertTitle>
-                  <Typography variant="body1"> Your request is being processed. Please wait until admin confirms your account. </Typography>
+                  <Typography variant="body1"> We are sorry but your account has been rejected by the admin. </Typography>
                 </Alert>
               </Grid>
             ) : !isCancel && !status ? (
