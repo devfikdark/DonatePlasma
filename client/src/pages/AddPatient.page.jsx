@@ -45,6 +45,7 @@ function AddPatient() {
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
   const [bloodGroup, setBloodGroup] = useState("");
+  const [status, setStatus] = useState(false);
   const [area, setArea] = useState("");
   const [donorList, setDonorList] = useState([]);
   const [patientInformation, setPatientInformation] = useState({
@@ -140,103 +141,137 @@ function AddPatient() {
       });
   };
 
+  const getHospitalInformation = () => {
+    console.log(localStorage.getItem("id"));
+    axios
+      .get(`/hospital/profile/${localStorage.getItem("id")}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        let info = res.data.data;
+        setStatus(info.status);
+      })
+      .catch((err) => {
+        if (err.response.data.message) {
+          Notification("Error", `${err.response.data.message}`, "error");
+        } else {
+          Notification("Error", "Something went wrong. Please check your internet connection", "error");
+        }
+      });
+  };
+
   useEffect(() => getHospitalDonors(), []);
 
   return (
     <div>
-      <Container maxWidth="lg" className={classes.margin}>
-        <Grid container>
-          <Tooltip title="Add new donor">
-            <Grid item xs={2}>
-              <Paper elevation={0} className={classes.paper} onClick={toggleAddPatientForm}>
-                <AddRoundedIcon className={classes.icon} />
-              </Paper>
-            </Grid>
-          </Tooltip>
-        </Grid>
-
-        {showForm && (
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} className={classes.margin}>
-              <Grid item xs={12}>
-                <TextField label="Full Name" required variant="outlined" name="fullName" value={fullName} onChange={handleChange} fullWidth />
+      {status ? (
+        <Container maxWidth="lg" className={classes.margin}>
+          <Grid container>
+            <Tooltip title="Add new donor">
+              <Grid item xs={2}>
+                <Paper elevation={0} className={classes.paper} onClick={toggleAddPatientForm}>
+                  <AddRoundedIcon className={classes.icon} />
+                </Paper>
               </Grid>
-              <Grid item xs={6}>
-                <TextField label="Phone Number" type="number" required variant="outlined" name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField label="Age" type="number" required variant="outlined" name="age" value={age} onChange={handleChange} fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl variant="outlined" fullWidth required>
-                  <InputLabel>Blood Group</InputLabel>
-                  <Select variant="outlined" value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {listOfBloodGroup.map((el) => (
-                      <MenuItem key={el.id} value={el.id}>
-                        {el.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl variant="outlined" fullWidth required>
-                  <InputLabel>Select Area</InputLabel>
-                  <Select variant="outlined" value={area} onChange={handleAreaLocation} label="Blood Group">
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {areaLocation.map((el) => (
-                      <MenuItem key={el.id} value={el.id}>
-                        {el.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField label="Address" required variant="outlined" name="address" rows={4} value={address} onChange={handleChange} multiline fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField label="Username" required variant="outlined" name="userName" value={userName} onChange={handleChange} fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField label="Password" type="password" required variant="outlined" name="password" value={password} onChange={handleChange} fullWidth />
-              </Grid>
-              <Grid item xs={6}>
-                <FormControlLabel
-                  control={<Checkbox checked={availability} onChange={handleAvailabilityChange} name="availability" color="primary" />}
-                  label="I am available to donate blood"
-                  className={classes.available}
-                />
-              </Grid>
-              <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
-                {loading ? "Creating profile..." : "Submit"}
-              </Button>
-            </Grid>
-          </form>
-        )}
-
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="center">
-              <Typography variant="h4">Donor List</Typography>
-            </Box>
+            </Tooltip>
           </Grid>
-          <Grid item xs={12}>
-            {donorList.length !== 0 ? (
-              <HospitalDonorList donorList={donorList} />
-            ) : (
+
+          {showForm && (
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2} className={classes.margin}>
+                <Grid item xs={12}>
+                  <TextField label="Full Name" required variant="outlined" name="fullName" value={fullName} onChange={handleChange} fullWidth />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField label="Phone Number" type="number" required variant="outlined" name="phoneNumber" value={phoneNumber} onChange={handleChange} fullWidth />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField label="Age" type="number" required variant="outlined" name="age" value={age} onChange={handleChange} fullWidth />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControl variant="outlined" fullWidth required>
+                    <InputLabel>Blood Group</InputLabel>
+                    <Select variant="outlined" value={bloodGroup} onChange={handleBloodGroup} label="Blood Group">
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {listOfBloodGroup.map((el) => (
+                        <MenuItem key={el.id} value={el.id}>
+                          {el.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControl variant="outlined" fullWidth required>
+                    <InputLabel>Select Area</InputLabel>
+                    <Select variant="outlined" value={area} onChange={handleAreaLocation} label="Blood Group">
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {areaLocation.map((el) => (
+                        <MenuItem key={el.id} value={el.id}>
+                          {el.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField label="Address" required variant="outlined" name="address" rows={4} value={address} onChange={handleChange} multiline fullWidth />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField label="Username" required variant="outlined" name="userName" value={userName} onChange={handleChange} fullWidth />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField label="Password" type="password" required variant="outlined" name="password" value={password} onChange={handleChange} fullWidth />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    control={<Checkbox checked={availability} onChange={handleAvailabilityChange} name="availability" color="primary" />}
+                    label="I am available to donate blood"
+                    className={classes.available}
+                  />
+                </Grid>
+                <Button type="submit" variant="contained" color="primary" fullWidth className={classes.submit} disabled={loading}>
+                  {loading ? "Creating profile..." : "Submit"}
+                </Button>
+              </Grid>
+            </form>
+          )}
+
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
-                <Typography variant="h5">Data Not Found</Typography>
+                <Typography variant="h4">Donor List</Typography>
               </Box>
-            )}
+            </Grid>
+            <Grid item xs={12}>
+              {donorList.length !== 0 ? (
+                <HospitalDonorList donorList={donorList} />
+              ) : (
+                <Box display="flex" justifyContent="center">
+                  <Typography variant="h5">Data Not Found</Typography>
+                </Box>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      ) : (
+        <Container maxWidth="lg" className={classes.margin}>
+          <Grid container>
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="center">
+                <Typography variant="h5">Your account is valid yet. </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      )}
     </div>
   );
 }
