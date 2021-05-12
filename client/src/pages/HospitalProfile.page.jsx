@@ -27,8 +27,9 @@ function HospitalProfile() {
     websiteName: "",
     address: "",
     status: true,
+    isCancel: false,
   });
-  const { hospitalUserName, hospitalName, phoneNumber, websiteName, address, status } = hospitalProfile;
+  const { hospitalUserName, hospitalName, phoneNumber, websiteName, address, status, isCancel } = hospitalProfile;
 
   const handleChange = (e) => setHospitalProfile({ ...hospitalProfile, [e.target.name]: e.target.value });
 
@@ -51,6 +52,7 @@ function HospitalProfile() {
         let info = res.data.data;
         setHospitalProfile({
           status: info.status,
+          isCancel: info.isCancel,
           hospitalUserName: info.user.userName,
           hospitalName: info.user.name,
           phoneNumber: info.user.phone,
@@ -113,14 +115,24 @@ function HospitalProfile() {
       <Container maxWidth="lg">
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            {!status && (
+            {isCancel && !status ? (
               <Grid item xs={12}>
                 <Alert severity="error" className={classes.margin}>
+                  <AlertTitle>Account Rejected</AlertTitle>
+                  <Typography variant="body1"> Your request is being processed. Please wait until admin confirms your account. </Typography>
+                </Alert>
+              </Grid>
+            ) : !isCancel && !status ? (
+              <Grid item xs={12}>
+                <Alert severity="warning" className={classes.margin}>
                   <AlertTitle>Pending Request</AlertTitle>
                   <Typography variant="body1"> Your request is being processed. Please wait until admin confirms your account. </Typography>
                 </Alert>
               </Grid>
+            ) : (
+              <></>
             )}
+
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
                 <Typography variant="h4">Hospital Information</Typography>

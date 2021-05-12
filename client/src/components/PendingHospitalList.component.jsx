@@ -24,6 +24,7 @@ const PendingHospitalList = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [rejectLoading, setRejectLoading] = useState(false);
   const [pendingHospitals, setPendingHospitals] = useState([]);
 
   const fetchPendingHospitalList = () => {
@@ -80,6 +81,33 @@ const PendingHospitalList = () => {
       .finally(() => setConfirmLoading(false));
   };
 
+  const rejectHospital = (id) => {
+    setRejectLoading(true);
+    axios
+      .patch(
+        `/hospital/profile/${id}/cancel`,
+        { isCancel: true },
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        Notification("Warning", "You've rejected the hospital", "warning");
+        fetchPendingHospitalList();
+      })
+      .catch((err) => {
+        if (err.response.data.message) {
+          Notification("Error", `${err.response.data.message}`, "error");
+        } else {
+          Notification("Error", "Something went wrong. Please check your internet connection", "error");
+        }
+      })
+      .finally(() => setRejectLoading(false));
+  };
+
   return (
     <div>
       <Grid container spacing={2} className={classes.layout}>
@@ -105,8 +133,8 @@ const PendingHospitalList = () => {
                             <Button variant="contained" color="primary" disableElevation className={classes.buttonStyle} size="small" onClick={() => confirmHospital(el._id)} disabled={confirmLoading}>
                               {confirmLoading ? "Confirming..." : "Confirm"}
                             </Button>
-                            <Button variant="outlined" color="secondary" size="small">
-                              Decline
+                            <Button variant="outlined" color="secondary" size="small" disabled={rejectLoading} onClick={() => rejectHospital(el._id)}>
+                              {rejectLoading ? "Rejecting..." : "Reject"}
                             </Button>
                           </Box>
                         </Box>
