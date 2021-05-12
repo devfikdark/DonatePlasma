@@ -221,7 +221,7 @@ export default function RegisterPage() {
               <Grid item xs={12}>
                 <Button variant="outlined" color="primary" component="label" startIcon={<AttachFileRoundedIcon />} className={classes.fileButton}>
                   File Input
-                  <input type="file" hidden name="encryptFile" onChange={handleFileChange} />
+                  <input accept="image/*" type="file" hidden name="encryptFile" onChange={handleFileChange} />
                 </Button>
                 {fileName}
               </Grid>

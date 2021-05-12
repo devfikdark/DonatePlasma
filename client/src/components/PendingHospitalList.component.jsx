@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Card, CardContent, CircularProgress, Divider, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Notification from "./Notification.component";
+import ImageZoom from "react-medium-image-zoom";
 import axios from "axios";
 import empty from "../images/nodata.svg";
 
@@ -140,7 +141,18 @@ const PendingHospitalList = () => {
                         </Box>
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <img src={el.documents} alt="hospital" height="100%" width="100%" />
+                        <ImageZoom
+                          image={{
+                            src: el.documents,
+                            alt: "hospital",
+                            className: "img",
+                            style: { width: "100%", height: "100%" },
+                          }}
+                          zoomImage={{
+                            src: el.documents,
+                            alt: "hospital",
+                          }}
+                        />
                       </Grid>
                     </Grid>
                   </CardContent>

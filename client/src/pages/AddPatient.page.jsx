@@ -45,7 +45,7 @@ function AddPatient() {
   const [availability, setAvailability] = useState(true);
   const [loading, setLoading] = useState(false);
   const [bloodGroup, setBloodGroup] = useState("");
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(true);
   const [area, setArea] = useState("");
   const [donorList, setDonorList] = useState([]);
   const [patientInformation, setPatientInformation] = useState({
@@ -101,6 +101,9 @@ function AddPatient() {
         .then((res) => {
           console.log(res);
           Notification("Success", "Donor account created successfully", "success");
+          setPatientInformation({ fullName: "", phoneNumber: "", age: "", address: "", userName: "", password: "" });
+          setBloodGroup("");
+          setArea("");
           getHospitalDonors();
         })
         .catch((err) => {
@@ -112,9 +115,6 @@ function AddPatient() {
         })
         .finally(() => {
           setLoading(false);
-          setPatientInformation({ fullName: "", phoneNumber: "", age: "", address: "", userName: "", password: "" });
-          setBloodGroup("");
-          setArea("");
         });
     } else {
       setLoading(false);
@@ -163,7 +163,7 @@ function AddPatient() {
       });
   };
 
-  useEffect(() => getHospitalDonors(), []);
+  useEffect(() => getHospitalDonors(), getHospitalInformation(), []);
 
   return (
     <div>
@@ -266,7 +266,7 @@ function AddPatient() {
           <Grid container>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
-                <Typography variant="h5">Your account is valid yet. </Typography>
+                <Typography variant="h5">Your account is not valid yet. </Typography>
               </Box>
             </Grid>
           </Grid>
