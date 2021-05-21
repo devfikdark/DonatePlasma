@@ -158,7 +158,12 @@ function Home() {
       axios
         .post("/notification", information)
         .then((res) => {
-          Notification("Success", "Your notification has been sent successfully", "success");
+          console.log(res.data.message);
+          if (res.data.message.includes("not")) {
+            Notification("Error", "Donor not found in your desired area with the desired blood group", "error");
+          } else {
+            Notification("Success", "Notification sent successfully", "success");
+          }
         })
         .catch((err) => {
           if (err.response.data.message) {
