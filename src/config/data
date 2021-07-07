@@ -1,4 +1,3 @@
-   
 NODE_ENV=develop
 PORT=5000
 DATABASE=mongodb+srv://shahrirarsarker:<password>@cluster0.nunwh.mongodb.net/donatePlasma?retryWrites=true&w=majority
